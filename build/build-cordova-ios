@@ -1,0 +1,16 @@
+/bin/build-app
+rm -rf /cordova-ios/*
+cd /cordova-ios
+cordova create robot_flash com.kevapps.robot_flash "Flashcards"
+cd robot_flash
+cordova platform add ios
+cordova plugin add cordova-plugin-file
+cordova plugin add cordova-plugin-device
+cordova plugin add cordova-plugin-screen-orientation
+cp /res/icon.png ./
+cp /res/splash.png ./
+cordova-icon
+cordova-splash
+cp /cordova/robot_flash/config-ios.xml /cordova-ios/robot_flash/config.xml
+rm -rf www
+mv /app/dist www
