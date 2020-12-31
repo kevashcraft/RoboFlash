@@ -1,0 +1,39 @@
+<template>
+  <v-snackbar v-model="opened" top shaped :timeout="3500">
+    <v-row>
+      <img src="@/assets/rate-us-robot.png" width="32px" style="margin: 0 10px"/>
+      <span style="margin-left: 15px; font-weight: bold">{{snackbar}}</span>
+    </v-row>
+  </v-snackbar>
+</template>
+
+<script>
+import { mapMutations, mapState } from 'vuex'
+
+export default {
+  name: 'MainSnackbar',
+
+  computed: {
+    ...mapState(['snackbar'])
+  },
+
+  watch: {
+    snackbar (snackbar) {
+      this.opened = !!snackbar
+    },
+    opened (opened) {
+      if (!opened) {
+        this.setGeneric({prop: 'snackbar', value: ''})
+      }
+    }
+  },
+
+  methods: mapMutations(['setGeneric']),
+
+  data: () => ({
+    opened: false
+  }),
+
+
+}
+</script>

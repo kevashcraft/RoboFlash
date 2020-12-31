@@ -80,22 +80,26 @@ export default new Vuex.Store({
     testCompleteDialogEnabled: true,
     rateUsDialogEnabled: true,
     dialog: 'none',
+    snackbar: '',
 
     languages: [
       {
         title: 'English',
         slug: 'en',
+        icon: require('@/assets/lang-icons/en.png'),
         reference: true,
         learning: false
       }, {
         title: 'Spanish',
         slug: 'es',
+        icon: require('@/assets/lang-icons/es.png'),
         reference: false,
         learning: true,
         audios: ['es1']
       }, {
         title: 'Korean',
         slug: 'ko',
+        icon: require('@/assets/lang-icons/ko.png'),
         reference: false,
         learning: true,
         audios: ['ko1']
@@ -135,7 +139,6 @@ export default new Vuex.Store({
     },
     setDeckList (state, deckList) {
       // update local deck list
-      console.log('set deckList', deckList)
       for (let idx in deckList) {
         const deck = deckList[idx]
         const localDeck = state.deckList.find(deck => deck.slug === deck.slug)
@@ -153,6 +156,9 @@ export default new Vuex.Store({
     setDownloadProgress (state, downloadProgress) {
       if (downloadProgress > 100) downloadProgress = 100
       state.downloadProgress = downloadProgress
+    },
+    setSnackbar (state, snackbar) {
+      state.snackbar = snackbar
     },
     setProposedDeck (state, proposedDeck) {
       state.proposedDeck = proposedDeck || {}
@@ -184,10 +190,13 @@ export default new Vuex.Store({
             }
             if (state.testCompleteDialogEnabled) state.dialog = 'testComplete'
           } else {
+            state.snackbar = 'You completed the set! WTG'
             if (!state.firstTestDialogDisplayed) state.dialog = 'firstTest'
             state.scores = []
           }
           state.testMode = !state.testMode
+        } else {
+          state.snackbar = 'You completed the set! WTG'
         }
         state.cardIdx = 0
       } else {
@@ -376,8 +385,10 @@ export default new Vuex.Store({
       return [card]
     },
     deckList (state) {
-      console.log('state.deckList', state.deckList)
       return state.deckList.map(deck => Object.assign({name: deck.titles[state.referenceLanguage], bestScore: 0}, deck))
+    },
+    deck (state) {
+      return Object.assign({name: state.deck.titles[state.referenceLanguage], bestScore: 0}, state.deck)
     },
     learningLanguage (state) {
       return state.languages.find(language => language.slug === state.learningLanguage)

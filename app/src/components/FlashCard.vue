@@ -4,8 +4,15 @@
     <v-btn icon v-if="!testMode && cardIdx > 0" style="position: absolute; top: 15px; left: 15px" @click="prevCard">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <v-btn text v-if="!testMode" style="position: absolute; top: 15px; right: 15px" @click="prevCard">
-      <span style="color: rgba(0, 0, 0, .54)">{{ activeCardCount }}</span>
+    <v-btn text x-small rounded outlined v-if="!testMode" style="position: absolute; top: 15px; left:50%; width: 80px; margin-left:-40px" @click="feedback">
+      Feedback
+    </v-btn>
+    <v-btn icon v-if="!testMode" style="position: absolute; top: 15px; right: 15px" @click="play">
+      <v-icon>mdi-volume-high</v-icon>
+    </v-btn>
+    <v-btn text v-if="testMode" style="position: absolute; top: 15px; right: 15px; opacity: .4" @click="skipTest">
+      Skip
+      <v-icon right color="blue">mdi-arrow-right</v-icon>
     </v-btn>
     <v-row class="flex-column fill-height" dense>
       <v-row class="flex-grow-0 justify-center align-end question">
@@ -148,7 +155,15 @@ export default {
     this.$refs['audio'].pause()
   },
   methods: {
-    ...mapMutations(['addScore', 'nextCard', 'prevCard']),
+    ...mapMutations(['addScore', 'nextCard', 'prevCard', 'setGeneric']),
+    play (event) {
+      event.stopPropagation()
+      this.$refs['audio'].play()
+    },
+    feedback (event) {
+      event.stopPropagation()
+      this.setGeneric({prop: 'dialog', value: 'feedback'})
+    },
     action () {
       if (this.testMode) return
       if (this.blurHint && this.showHints === 'onTap') {
@@ -179,6 +194,10 @@ export default {
     },
     hasBigWord(text) {
       return text.length > 15 || text.split(' ').some(w => w.length > 10)
+    },
+    skipTest () {
+      this.setGeneric({prop: 'testMode', value: false})
+      this.setGeneric({prop: 'cardIdx', value: 0})
     }
   },
   data: () => ({

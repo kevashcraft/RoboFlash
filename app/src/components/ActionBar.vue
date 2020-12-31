@@ -1,34 +1,36 @@
 <template>
   <v-container style="height: 55px; padding: 0 55px">
     <v-row class="justify-space-between align-center fill-height">
-      <v-menu top :offset-y="true" :nudge-top="15">
+      <v-menu top :offset-y="true" :nudge-top="25" auto :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-image-multiple</v-icon>
+          <v-btn v-bind="attrs" v-on="on" color="blue" @click="langOptionGroup = false">
+            <img :src="learningLanguage.icon" width="24">
+            <span style="margin-left: 8px; color: white">{{ deck.name }}</span>
           </v-btn>
         </template>
         <v-list>
-          <v-subheader style="color: #2995fe"><strong>Learning</strong></v-subheader>
-          <v-list-item >
-            <v-list-item-content>
-              <v-menu right :offset-x="true" :nudge-right="20">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-list-item-title>
-                    <v-btn text v-bind="attrs" v-on="on">
-                      {{ learningLanguage.title }}
-                    </v-btn>
-                  </v-list-item-title>
-                </template>
-                <v-list>
-                  <v-list-item v-for="l in learningLanguages" :key="l.slug"
-                    @click="setLanguage(l.slug)"
-                    :class="l.slug === learningLanguage.slug ? 'deck-selected' : ''">
-                    <v-list-item-title v-text="l.title"></v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-list-item-content>
-          </v-list-item>
+
+          <v-list-group v-model="langOptionGroup">
+            <template v-slot:activator>
+              <v-list-item-icon>
+                <img :src="learningLanguage.icon" width="24">
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-subtitle>Learning</v-list-item-subtitle>
+                <v-list-item-title v-text="learningLanguage.title"></v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item v-for="l in learningLanguages" :key="l.slug"
+              @click="setLanguage(l.slug); langOptionGroup=false"
+              :class="l.slug === learningLanguage.slug ? 'deck-selected' : ''">
+              <v-list-item-icon>
+                <img :src="l.icon" height="32">
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="l.title"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
 
           <v-subheader style="color: #2995fe"><strong>Available Cards</strong></v-subheader>
           <v-divider></v-divider>
@@ -44,69 +46,68 @@
               <v-icon v-if="d.downloaded">mdi-check</v-icon>
             </v-list-item-icon>
           </v-list-item>
+
         </v-list>
       </v-menu>
 
-      <v-menu top :offset-y="true" :nudge-top="15">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon v-show="sortMethod === 'alpha'">mdi-sort-alphabetical-ascending-variant</v-icon>
-            <v-icon v-show="sortMethod === 'leastViewed'">mdi-sort-ascending</v-icon>
-            <v-icon v-show="sortMethod === 'shuffle'">mdi-shuffle-variant</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-subheader style="color: #2995fe"><strong>Sort Cards</strong></v-subheader>
-          <v-divider></v-divider>
-          <v-list-item @click="sortCards('alpha')"
-            :class="sortMethod === 'alpha' ? 'deck-selected' : ''">
-            <v-list-item-content>
-              <v-list-item-title>Alphabetical</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon>mdi-sort-alphabetical-ascending-variant</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item @click="sortCards('leastViewed')"
-            :class="sortMethod === 'leastViewed' ? 'deck-selected' : ''">
-            <v-list-item-content>
-              <v-list-item-title>Least Viewed</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon>mdi-sort-ascending</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item @click="sortCards('shuffle')"
-            :class="sortMethod === 'shuffle' ? 'deck-selected' : ''">
-            <v-list-item-content>
-              <v-list-item-title>Shuffle</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon>mdi-shuffle-variant</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <v-menu top :offset-y="true" :nudge-top="15">
+      <v-menu :offset-y="true" :nudge-top="35" top :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-menu</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-subheader style="color: #2995fe"><strong>Audio and Theme</strong></v-subheader>
+          <v-subheader style="color: #2995fe"><strong>App Settings</strong></v-subheader>
+          <v-divider></v-divider>
+          <v-list-group
+            v-for="item in menu"
+            :key="item.slug"
+            v-model="item.active"
+            :prepend-icon="item.icon"
+            no-action
+            >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+              </v-list-item-content>
+            </template> 
+            <v-list-item
+              v-for="option in item.options"
+              :key="option.slug"
+              @click="optionAction(item.slug, option.slug)"
+              :class="optionClass(item.slug, option.slug)"
+              >
+              <v-list-item-icon>
+                <v-icon>{{option.icon}}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="option.title"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+
+          <v-subheader style="color: #2995fe"><strong>Audio / Theme / Tests</strong></v-subheader>
           <v-list-item @click="toggleAudioEnabled">
-            <v-list-item-title v-show="audioEnabled">Turn Audio Off</v-list-item-title>
-            <v-list-item-title v-show="!audioEnabled">Turn Audio On</v-list-item-title>
+            <v-list-item-icon v-if="audioEnabled">
+              <v-icon>mdi-volume-off</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title v-if="audioEnabled">Turn Audio Off</v-list-item-title>
+            <v-list-item-icon v-if="!audioEnabled">
+              <v-icon>mdi-volume-high</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title v-if="!audioEnabled">Turn Audio On</v-list-item-title>
           </v-list-item>
           <v-list-item @click="toggleDarkTheme">
-            <v-list-item-title v-show="darkTheme">Light Theme</v-list-item-title>
-            <v-list-item-title v-show="!darkTheme">Dark Theme</v-list-item-title>
+            <v-list-item-icon>
+              <v-icon>mdi-theme-light-dark</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title v-show="darkTheme">Switch to Light Theme</v-list-item-title>
+            <v-list-item-title v-show="!darkTheme">Switch to Dark Theme</v-list-item-title>
           </v-list-item>
-          <v-divider></v-divider>
-          <v-subheader style="color: #2995fe"><strong>Test Mode</strong></v-subheader>
           <v-list-item @click="toggleTestModeEnabled">
+            <v-list-item-icon>
+              <v-icon>mdi-ab-testing</v-icon>
+            </v-list-item-icon>
             <v-list-item-title v-show="testModeEnabled">Turn Tests Off</v-list-item-title>
             <v-list-item-title v-show="!testModeEnabled">Turn Tests On</v-list-item-title>
           </v-list-item>
@@ -117,57 +118,6 @@
             <v-list-item-title>Expand View</v-list-item-title>
           </v-list-item> -->
           <v-divider></v-divider>
-          <v-subheader style="color: #2995fe"><strong>Show Images</strong></v-subheader>
-          <v-list-item @click="setShowHints('always')">
-            <v-list-item-content>
-              <v-list-item-title>Always</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-show="showHints === 'always'" color="green">mdi-check</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item @click="setShowHints('onTap')">
-            <v-list-item-content>
-              <v-list-item-title>On Tap</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-show="showHints === 'onTap'" color="green">mdi-check</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item @click="setShowHints('never')">
-            <v-list-item-content>
-              <v-list-item-title>Never</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-show="showAnswers === 'never'" color="green">mdi-check</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-subheader style="color: #2995fe"><strong>Show Answers</strong></v-subheader>
-          <v-list-item @click="setShowAnswers('always')">
-            <v-list-item-content>
-              <v-list-item-title>Always</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-show="showAnswers === 'always'" color="green">mdi-check</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item @click="setShowAnswers('onTap')">
-            <v-list-item-content>
-              <v-list-item-title>On Tap</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-show="showAnswers === 'onTap'" color="green">mdi-check</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
-          <v-list-item @click="setShowAnswers('never')">
-            <v-list-item-content>
-              <v-list-item-title>Never</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-show="showAnswers === 'never'" color="green">mdi-check</v-icon>
-            </v-list-item-icon>
-          </v-list-item>
           <v-divider></v-divider>
           <v-list-item @click="showLicenses">
             <v-list-item-title>Licenses</v-list-item-title>
@@ -192,11 +142,11 @@ export default {
   name: 'ActionBar',
   computed: {
     ...mapState([
-      'audioEnabled', 'darkTheme', 'deck',
+      'audioEnabled', 'darkTheme',
       'testModeEnabled', 'testCompleteDialogEnabled',
       'showAnswers', 'showHints', 'sortMethod'
     ]),
-    ...mapGetters(['deckList', 'learningLanguages', 'learningLanguage'])
+    ...mapGetters(['deckList', 'learningLanguages', 'learningLanguage', 'deck'])
   },
   methods: {
     ...mapActions(['deckChange', 'sortCards', 'setLanguage']),
@@ -211,6 +161,30 @@ export default {
     },
     showLicenses () {
       this.setGeneric({prop: 'dialog', value: 'licenses'})
+    },
+    optionAction (item, option) {
+      if (item === 'sort') {
+        this.sortCards(option)
+      } else if (item === 'images') {
+        this.setShowHints(option)
+      } else if (item === 'answers') {
+        this.setShowAnswers(option)
+      }
+    },
+    optionClass (item, option) {
+      if (item === 'sort') {
+        return {
+          'deck-selected': this.sortMethod === option
+        }
+      } else if (item === 'images') {
+        return {
+          'deck-selected': this.showHints === option
+        }
+      } else if (item === 'answers') {
+        return {
+          'deck-selected': this.showAnswers === option
+        }
+      }
     },
     getBestScoreStyle(bestScore) {
       if (!bestScore) return {}
@@ -229,10 +203,72 @@ export default {
       this.setGeneric({prop: 'testCompleteDialogEnabled', value: true})
     },
   },
-  mounted (){
-    console.log('this.deckList', JSON.stringify(this.deckList))
-  },
+
   data: () => ({
+    langOptionGroup: false,
+    menu: [
+      {
+        title: 'Sort Cards',
+        slug: 'sort',
+        icon: 'mdi-sort-reverse-variant',
+        active: false,
+        options: [
+          {
+            title: 'Alphabetical',
+            slug: 'alpha',
+            icon: 'mdi-sort-alphabetical-ascending-variant'
+          }, {
+            title: 'Least Viewed',
+            slug: 'leastViewed',
+            icon: 'mdi-sort-ascending'
+          }, {
+            title: 'Shuffle',
+            slug: 'shuffle',
+            icon: 'mdi-shuffle-variant'
+          }
+        ]
+      }, {
+        title: 'Show Images',
+        slug: 'images',
+        icon: 'mdi-tooltip-image',
+        active: false,
+        options: [
+          {
+            title: 'Always Show',
+            slug: 'always',
+            icon: 'mdi-pin-outline'
+          }, {
+            title: 'Show on Tap',
+            slug: 'onTap',
+            icon: 'mdi-gesture-tap'
+          }, {
+            title: 'Never Show',
+            slug: 'never',
+            icon: 'mdi-eye-off-outline'
+          }
+        ]
+      }, {
+        title: 'Show Answers',
+        slug: 'answers',
+        icon: 'mdi-forum',
+        active: false,
+        options: [
+          {
+            title: 'Always Show',
+            slug: 'always',
+            icon: 'mdi-pin-outline'
+          }, {
+            title: 'Show on Tap',
+            slug: 'onTap',
+            icon: 'mdi-gesture-tap'
+          }, {
+            title: 'Never Show',
+            slug: 'never',
+            icon: 'mdi-eye-off-outline'
+          }
+        ]
+      }
+    ]
     
   }),
 }

@@ -1,47 +1,9 @@
 ---ONE---
-Make working copy
-Combine Decks
 Deck Feature Photo - stacked collection of init three
-
-decklist.json
-[
-  {
-    slug,
-    names: {es, en, ko}
-  }
-]
-decks/{slug}.json
-[
-  {
-    sheetIdx,
-    img,
-    words: {es, en, ko}
-    audios: {es:[], en:[], ko:[]}
-  }
-]
-
-
-Make changes
-Menu updates
 Welcome Dialog - language selection / deck selection
 Streek Display
-Feedback
 Revisit Notifications
 On screen success toasts
-
-
-Deck Menu
-Language >
-[DeckName (score) for _ in decks]
-
-Move shuffle to Menu
-Add streek to middle bottom - daily icons
-Condense menu using >
-
-Add repeat audio button (top right)
-Add feedback button (top center)
-
-Feedback -> Firestore
 
 
 WELCOME WINDOW

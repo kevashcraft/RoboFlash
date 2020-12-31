@@ -15,7 +15,9 @@
     <TestCompleteDialog />
     <LicensesDialog />
     <RateUsDialog />
+    <FeedbackDialog />
     <AppDownloadSnackbar />
+    <MainSnackbar />
     <v-dialog v-model="showDebugDialog" max-width="350px">
       <v-card outlined elevation="6">
         <v-card-title>Expanded View</v-card-title>
@@ -47,10 +49,14 @@ import FirstTestDialog from './components/FirstTestDialog'
 import TestCompleteDialog from './components/TestCompleteDialog'
 import LicensesDialog from './components/LicensesDialog'
 import RateUsDialog from './components/RateUsDialog'
+import FeedbackDialog from './components/FeedbackDialog'
 import AppDownloadSnackbar from './components/AppDownloadSnackbar'
+import MainSnackbar from './components/MainSnackbar'
 
 import { mapState } from 'vuex'
 import moment from 'moment'
+
+import firebase from './plugins/firebase'
 
 export default {
   name: 'App',
@@ -66,7 +72,9 @@ export default {
     TestCompleteDialog,
     LicensesDialog,
     RateUsDialog,
-    AppDownloadSnackbar
+    FeedbackDialog,
+    AppDownloadSnackbar,
+    MainSnackbar
   },
 
   data: () => ({
@@ -86,6 +94,7 @@ export default {
     this.$store.commit('setDownloadProgress', -1)
     this.$store.commit('setProposedDeck', {})
     this.$store.commit('setDialog', 'none')
+    this.$store.commit('setGeneric', {prop: 'snackbar', value: ''})
     setTimeout(() => {
       if (!this.$store.state.welcomeDialogDisplayed) {
         this.$store.commit('setDialog', 'welcome')
@@ -112,6 +121,7 @@ export default {
       this.showDebugDialog = true
     },
     async init () {
+      firebase.init()
       const userAgent = navigator.userAgent.toLowerCase();
       window.debugInfo.push('userAgent - ' + userAgent)
       const isTablet = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(userAgent);
