@@ -4,14 +4,14 @@
     <v-btn icon v-if="!testMode && cardIdx > 0" style="position: absolute; top: 15px; left: 15px" @click="prevCard">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <v-btn text x-small rounded outlined v-if="!testMode" style="position: absolute; top: 15px; left:50%; width: 80px; margin-left:-40px" @click="feedback">
-      Feedback
+    <v-btn text x-small rounded outlined v-if="!testMode" style="position: absolute; top: 15px; left:50%; width: 100px; margin-left:-50px" @click="feedback">
+      {{ langs.feedback[referenceLanguage] }}
     </v-btn>
     <v-btn icon v-if="!testMode" style="position: absolute; top: 15px; right: 15px" @click="play">
       <v-icon>mdi-volume-high</v-icon>
     </v-btn>
     <v-btn text v-if="testMode" style="position: absolute; top: 15px; right: 15px; opacity: .4" @click="skipTest">
-      Skip
+      {{ langs.skip[referenceLanguage] }}
       <v-icon right color="blue">mdi-arrow-right</v-icon>
     </v-btn>
     <v-row class="flex-column fill-height" dense>
@@ -125,7 +125,7 @@ export default {
   props: {
     card: Object
   },
-  computed: mapState(['audioEnabled', 'cardIdx', 'showHints', 'showAnswers', 'activeCardCount', 'testMode']),
+  computed: mapState(['audioEnabled', 'cardIdx', 'showHints', 'showAnswers', 'activeCardCount', 'testMode', 'referenceLanguage']),
   watch: {
     audioEnabled (enabled) {
       if (!enabled) {
@@ -205,6 +205,18 @@ export default {
     hideAnswer: false,
     blurHint: false,
     hideHint: false,
+    langs: {
+      feedback: {
+        en: 'Feedback',
+        es: 'Comentarios',
+        ko: '피드백'
+      },
+      skip: {
+        en: 'Skip',
+        es: 'Omitir',
+        ko: '건너 뛰기'
+      }
+    }
   }),
 }
 </script>

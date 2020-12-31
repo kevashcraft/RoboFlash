@@ -65,6 +65,36 @@ function  shuffleArray(array) {
   }
 }
 
+const languages = [
+  {
+    title: 'English',
+    slug: 'en',
+    icon: require('@/assets/lang-icons/en.png'),
+    learning: true,
+    audios: ['en1']
+  }, {
+    title: 'Spanish',
+    slug: 'es',
+    icon: require('@/assets/lang-icons/es.png'),
+    learning: true,
+    audios: ['es1']
+  }, {
+    title: 'Korean',
+    slug: 'ko',
+    icon: require('@/assets/lang-icons/ko.png'),
+    learning: true,
+    audios: ['ko1']
+  }
+];
+
+const langs = {
+  ycts: {
+    en: 'You completed the set! WTG',
+    es: '¡Has completado el set! WTG',
+    ko: '세트를 완료하셨습니다! WTG'
+  }
+}
+
 export default new Vuex.Store({
   state: {
     isApp: !!window.cordova,
@@ -81,30 +111,6 @@ export default new Vuex.Store({
     rateUsDialogEnabled: true,
     dialog: 'none',
     snackbar: '',
-
-    languages: [
-      {
-        title: 'English',
-        slug: 'en',
-        icon: require('@/assets/lang-icons/en.png'),
-        reference: true,
-        learning: false
-      }, {
-        title: 'Spanish',
-        slug: 'es',
-        icon: require('@/assets/lang-icons/es.png'),
-        reference: false,
-        learning: true,
-        audios: ['es1']
-      }, {
-        title: 'Korean',
-        slug: 'ko',
-        icon: require('@/assets/lang-icons/ko.png'),
-        reference: false,
-        learning: true,
-        audios: ['ko1']
-      }
-    ],
 
     deckList: [],
     proposedDeck: {},
@@ -134,8 +140,8 @@ export default new Vuex.Store({
     },
     setLanguage (state, language) {
       state.learningLanguage = language
-      state.audioSlug = state.languages.find(l => l.slug === language).audios[0]
-      
+      state.audioSlug = languages.find(l => l.slug === language).audios[0]
+      console.log('state.audioSlug', state.audioSlug)
     },
     setDeckList (state, deckList) {
       // update local deck list
@@ -190,7 +196,7 @@ export default new Vuex.Store({
             }
             if (state.testCompleteDialogEnabled) state.dialog = 'testComplete'
           } else {
-            state.snackbar = 'You completed the set! WTG'
+            state.snackbar = langs.ycts[state.referenceLanguage]
             if (!state.firstTestDialogDisplayed) state.dialog = 'firstTest'
             state.scores = []
           }
@@ -388,13 +394,18 @@ export default new Vuex.Store({
       return state.deckList.map(deck => Object.assign({name: deck.titles[state.referenceLanguage], bestScore: 0}, deck))
     },
     deck (state) {
-      return Object.assign({name: state.deck.titles[state.referenceLanguage], bestScore: 0}, state.deck)
+      const deck =  Object.assign({name: state.deck.titles[state.referenceLanguage], bestScore: 0}, state.deck)
+      console.log('deck', deck)
+      return deck
+    },
+    languages () {
+      return languages
     },
     learningLanguage (state) {
-      return state.languages.find(language => language.slug === state.learningLanguage)
+      return languages.find(language => language.slug === state.learningLanguage)
     },
-    learningLanguages (state) {
-      return state.languages.filter(language => language.learning)
+    learningLanguages () {
+      return languages.filter(language => language.learning)
     },
     cardProgress (state) { 
       return Math.ceil(state.cardIdx / (Object.keys(cards).length - 1) * 100)

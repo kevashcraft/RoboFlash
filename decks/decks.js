@@ -26,18 +26,31 @@ const MAX_WORD_ROWS = 50
 const DeckColumns = {
     slug: 0,
     version: 1,
-    type: 2
+    status: 2,
+    type: 3
 }
 axios.defaults.headers.common['User-Agent'] = 'Robot Language Flashcards - contact@robot-language-flashcards.com';
 
 const languages = [
     {
         slug: 'en',
-        deckNameCol: 3,
-        deckStatusCol: 4
+        deckNameCol: 4,
+        audios: [
+            {
+                slug: 'en1',
+                speakingRate: '.9',
+                voice: {
+                    languageCode: 'en-US',
+                    ssmlGender: 'FEMALE',
+                    name: 'en-US-Wavenet-H'
+                }
+            }
+        ]
+
     },
     {
         slug: 'es',
+        deckNameCol: 6,
         audios: [
             {
                 slug: 'es1',
@@ -52,6 +65,7 @@ const languages = [
     },
     {
         slug: 'ko',
+        deckNameCol: 8,
         audios: [
             {
                 slug: 'ko1',
@@ -131,6 +145,7 @@ async function deploy (decks) {
                         const filename = `${card.slug}-${audio.slug}`
                         if (await gcsFileExists('audio', filename)) {
                             card.audios[audio.slug] = await gcsReadFile('audio', filename)
+                            console.log('got uadio for', audio.slug)
                         }
                     }
                 }
@@ -208,7 +223,7 @@ async function server (decks) {
 async function getDeckList(deckDataSpreadsheet) {
     const sheet = deckDataSpreadsheet.sheetsByTitle['Deck List']
 
-    await sheet.loadCells(`A1:H${MAX_DECK_ROWS}`);
+    await sheet.loadCells(`A1:I${MAX_DECK_ROWS}`);
 
     const deckList = []
     for (let index=0; index<MAX_DECK_ROWS; index++) {
@@ -217,16 +232,14 @@ async function getDeckList(deckDataSpreadsheet) {
             deck[col] = sheet.getCell(index, DeckColumns[col]).value
         })
         if (!deck.slug) continue
+        if (deck.status !== 'enabled') continue
         deck.titles = {}
+
         languages.filter(language => !!language.deckNameCol).forEach(language => {
-            const deckStatus = sheet.getCell(index, language.deckStatusCol).value
-            if (deckStatus ===  'enabled') {
-                deck.titles[language.slug] = sheet.getCell(index, language.deckNameCol).value
-            }
+            deck.titles[language.slug] = sheet.getCell(index, language.deckNameCol).value
         })
-        if (Object.keys(deck.titles).length) {
-            deckList.push(deck)
-        }
+        console.log('deck.titles', deck.titles)
+        deckList.push(deck)
     }
 
     return deckList

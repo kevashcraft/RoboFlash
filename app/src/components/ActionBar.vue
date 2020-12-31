@@ -1,7 +1,7 @@
 <template>
   <v-container style="height: 55px; padding: 0 55px">
     <v-row class="justify-space-between align-center fill-height">
-      <v-menu top :offset-y="true" :nudge-top="25" auto :close-on-content-click="false">
+      <v-menu top :offset-y="true" :nudge-top="25" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on" color="blue" @click="langOptionGroup = false">
             <img :src="learningLanguage.icon" width="24">
@@ -16,7 +16,7 @@
                 <img :src="learningLanguage.icon" width="24">
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-subtitle>Learning</v-list-item-subtitle>
+                <v-list-item-subtitle>{{langs.learning[referenceLanguage]}}</v-list-item-subtitle>
                 <v-list-item-title v-text="learningLanguage.title"></v-list-item-title>
               </v-list-item-content>
             </template>
@@ -32,7 +32,7 @@
             </v-list-item>
           </v-list-group>
 
-          <v-subheader style="color: #2995fe"><strong>Available Cards</strong></v-subheader>
+          <v-subheader style="color: #2995fe"><strong>{{langs.avc[referenceLanguage]}}</strong></v-subheader>
           <v-divider></v-divider>
           <v-list-item v-for="d in deckList" :key="d.name"
             @click="deckChange(d)"
@@ -52,12 +52,12 @@
 
       <v-menu :offset-y="true" :nudge-top="35" top :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
+          <v-btn icon v-bind="attrs" v-on="on" @click="closeMenus">
             <v-icon>mdi-menu</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-subheader style="color: #2995fe"><strong>App Settings</strong></v-subheader>
+          <v-subheader style="color: #2995fe"><strong>{{langs.aps[referenceLanguage]}}</strong></v-subheader>
           <v-divider></v-divider>
           <v-list-group
             v-for="item in menu"
@@ -78,7 +78,8 @@
               :class="optionClass(item.slug, option.slug)"
               >
               <v-list-item-icon>
-                <v-icon>{{option.icon}}</v-icon>
+                <v-icon v-if="option.icon">{{option.icon}}</v-icon>
+                <img v-if="option.img" :src="option.img" height="32">
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="option.title"></v-list-item-title>
@@ -86,30 +87,30 @@
             </v-list-item>
           </v-list-group>
 
-          <v-subheader style="color: #2995fe"><strong>Audio / Theme / Tests</strong></v-subheader>
+          <v-subheader style="color: #2995fe"><strong>{{langs.att[referenceLanguage]}}</strong></v-subheader>
           <v-list-item @click="toggleAudioEnabled">
             <v-list-item-icon v-if="audioEnabled">
               <v-icon>mdi-volume-off</v-icon>
             </v-list-item-icon>
-            <v-list-item-title v-if="audioEnabled">Turn Audio Off</v-list-item-title>
+            <v-list-item-title v-if="audioEnabled">{{langs.taoff[referenceLanguage]}}</v-list-item-title>
             <v-list-item-icon v-if="!audioEnabled">
               <v-icon>mdi-volume-high</v-icon>
             </v-list-item-icon>
-            <v-list-item-title v-if="!audioEnabled">Turn Audio On</v-list-item-title>
+            <v-list-item-title v-if="!audioEnabled">{{langs.taon[referenceLanguage]}}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="toggleDarkTheme">
             <v-list-item-icon>
               <v-icon>mdi-theme-light-dark</v-icon>
             </v-list-item-icon>
-            <v-list-item-title v-show="darkTheme">Switch to Light Theme</v-list-item-title>
-            <v-list-item-title v-show="!darkTheme">Switch to Dark Theme</v-list-item-title>
+            <v-list-item-title v-show="darkTheme">{{langs.stlt[referenceLanguage]}}</v-list-item-title>
+            <v-list-item-title v-show="!darkTheme">{{langs.stdt[referenceLanguage]}}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="toggleTestModeEnabled">
             <v-list-item-icon>
               <v-icon>mdi-ab-testing</v-icon>
             </v-list-item-icon>
-            <v-list-item-title v-show="testModeEnabled">Turn Tests Off</v-list-item-title>
-            <v-list-item-title v-show="!testModeEnabled">Turn Tests On</v-list-item-title>
+            <v-list-item-title v-show="testModeEnabled">{{langs.ttoff[referenceLanguage]}}</v-list-item-title>
+            <v-list-item-title v-show="!testModeEnabled">{{langs.tton[referenceLanguage]}}</v-list-item-title>
           </v-list-item>
           <v-list-item v-show="!testCompleteDialogEnabled" @click="enableTestDialog">
             <v-list-item-title>Reenable Test Complete Dialog</v-list-item-title>
@@ -142,11 +143,21 @@ export default {
   name: 'ActionBar',
   computed: {
     ...mapState([
-      'audioEnabled', 'darkTheme',
+      'audioEnabled', 'darkTheme', 'referenceLanguage',
       'testModeEnabled', 'testCompleteDialogEnabled',
       'showAnswers', 'showHints', 'sortMethod'
     ]),
-    ...mapGetters(['deckList', 'learningLanguages', 'learningLanguage', 'deck'])
+    ...mapGetters(['deckList', 'learningLanguages', 'learningLanguage', 'deck']),
+    menu () {
+      const menu = {...this.menuData}
+      for (let midx in menu) {
+        menu[midx].title = menu[midx].titles[this.referenceLanguage]
+        for (let oidx in menu[midx].options) {
+          menu[midx].options[oidx].title = menu[midx].options[oidx].titles[this.referenceLanguage]
+        }
+      }
+      return menu
+    }
   },
   methods: {
     ...mapActions(['deckChange', 'sortCards', 'setLanguage']),
@@ -156,6 +167,9 @@ export default {
       'toggleTestModeEnabled',
       'setGeneric'
     ]),
+    closeMenus () {
+      this.menuData.forEach(item => item.active = false)
+    },
     showDebug () {
       this.$emit('showDebug')
     },
@@ -169,6 +183,10 @@ export default {
         this.setShowHints(option)
       } else if (item === 'answers') {
         this.setShowAnswers(option)
+      } else if (item === 'reference') {
+        this.setGeneric({prop: 'cardIdx', value: -1})
+        this.setGeneric({prop: 'referenceLanguage', value: option})
+        this.setGeneric({prop: 'cardIdx', value: 0})
       }
     },
     optionClass (item, option) {
@@ -183,6 +201,10 @@ export default {
       } else if (item === 'answers') {
         return {
           'deck-selected': this.showAnswers === option
+        }
+      } else if (item === 'reference') {
+        return {
+          'deck-selected': this.referenceLanguage === option
         }
       }
     },
@@ -206,63 +228,199 @@ export default {
 
   data: () => ({
     langOptionGroup: false,
-    menu: [
+    langs: {
+      'learning': {
+        en: 'Learning',
+        es: 'Aprendizaje',
+        ko: '배우기'
+      },
+      'avc': {
+        en: 'Available Cards',
+        es: 'Tarjetas Disponibles',
+        ko: '사용 가능한 카드'
+      },
+      'aps': {
+        en: 'App Settings',
+        es: 'Ajustes de Aplicacion',
+        ko: '앱 설정'
+      },
+      'att': {
+        en: 'Audio / Theme / Tests',
+        es: 'Audio / Tema / Pruebas',
+        ko: '오디오 / 테마 / 테스트'
+      },
+      'taoff': {
+        en: 'Turn Audio Off',
+        es: 'Apague el Audio',
+        ko: '오디오 끄기'
+      },
+      'taon': {
+        en: 'Turn Audio On',
+        es: 'Activar Audio',
+        ko: '오디오 켜기'
+      },
+      'stlt': {
+        en: 'Switch to Light Theme',
+        es: 'Cambiar a Tema de Luz',
+        ko: '밝은 테마로 전환'
+      },
+      'stdt': {
+        en: 'Switch to Dark Theme',
+        es: 'Cambiar a Tema Oscuro',
+        ko: '어두운 테마로 전환'
+      },
+      'ttoff': {
+        en: 'Turn Tests Off',
+        es: 'Desactivar Pruebas',
+        ko: '테스트 끄기'
+      },
+      'tton': {
+        en: 'Turn Tests On',
+        es: 'Activar las Pruebas',
+        ko: '테스트 켜기'
+      }
+    },
+    menuData: [
       {
-        title: 'Sort Cards',
+        titles: {
+          en: 'Reference Language',
+          es: 'Lenguaje de Referencia',
+          ko: '참조 언어',
+        },
+        slug: 'reference',
+        icon: 'mdi-web',
+        active: false,
+        options: [
+          {
+            titles: {
+              en: 'English',
+              es: 'Inglés',
+              ko: '영어'
+            },
+            slug: 'en',
+            img: require('@/assets/lang-icons/en.png')
+          }, {
+            titles: {
+              en: 'Spanish',
+              es: 'Español',
+              ko: '스페인의'
+            },
+            slug: 'es',
+            img: require('@/assets/lang-icons/es.png')
+          }, {
+            titles: {
+              en: 'Korean',
+              es: 'Coreano',
+              ko: '한국어'
+            },
+            slug: 'ko',
+            img: require('@/assets/lang-icons/ko.png')
+          }
+        ]
+      }, {
+        titles: {
+          en: 'Sort Cards',
+          es: 'Ordenar Tarjetas',
+          ko: '카드 정렬',
+        },
         slug: 'sort',
         icon: 'mdi-sort-reverse-variant',
         active: false,
         options: [
           {
-            title: 'Alphabetical',
+            titles: {
+              en: 'Alphabetical',
+              es: 'Alfabética',
+              ko: '알파벳순'
+            },
             slug: 'alpha',
             icon: 'mdi-sort-alphabetical-ascending-variant'
           }, {
-            title: 'Least Viewed',
+            titles: {
+              en: 'Least Viewed',
+              es: 'Menos Vista',
+              ko: '가장 적게 본'
+            },
             slug: 'leastViewed',
             icon: 'mdi-sort-ascending'
           }, {
-            title: 'Shuffle',
+            titles: {
+              en: 'Shuffle',
+              es: 'Barajar',
+              ko: '혼합'
+            },
             slug: 'shuffle',
             icon: 'mdi-shuffle-variant'
           }
         ]
       }, {
-        title: 'Show Images',
+        titles: {
+          en: 'Show Images',
+          es: 'Mostrar Imagenes',
+          ko: '이미지 표시'
+        },
         slug: 'images',
         icon: 'mdi-tooltip-image',
         active: false,
         options: [
           {
-            title: 'Always Show',
+            titles: {
+              en: 'Always Show',
+              es: 'Siempre Muestra',
+              ko: '항상 표시'
+            },
             slug: 'always',
             icon: 'mdi-pin-outline'
           }, {
-            title: 'Show on Tap',
+            titles: {
+              en: 'Show on Tap',
+              es: 'Mostrar al Tocar',
+              ko: '탭에 표시'
+            }, 
             slug: 'onTap',
             icon: 'mdi-gesture-tap'
           }, {
-            title: 'Never Show',
+            titles: {
+              en: 'Never Show',
+              es: 'Nunca Mostrar',
+              ko: '표시 안함'
+            },
             slug: 'never',
             icon: 'mdi-eye-off-outline'
           }
         ]
       }, {
-        title: 'Show Answers',
+        titles: {
+          en: 'Show Answers',
+          es: 'Mostrar Respuestas',
+          ko: '답을 알려줘'
+        },
         slug: 'answers',
         icon: 'mdi-forum',
         active: false,
         options: [
           {
-            title: 'Always Show',
+            titles: {
+              en: 'Always Show',
+              es: 'Siempre Muestra',
+              ko: '항상 표시'
+            },
             slug: 'always',
             icon: 'mdi-pin-outline'
           }, {
-            title: 'Show on Tap',
+            titles: {
+              en: 'Show on Tap',
+              es: 'Mostrar al Tocar',
+              ko: '탭에 표시'
+            }, 
             slug: 'onTap',
             icon: 'mdi-gesture-tap'
           }, {
-            title: 'Never Show',
+            titles: {
+              en: 'Never Show',
+              es: 'Nunca Mostrar',
+              ko: '표시 안함'
+            },
             slug: 'never',
             icon: 'mdi-eye-off-outline'
           }
