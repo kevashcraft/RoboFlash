@@ -1,5 +1,5 @@
 <template>
-  <v-container style="height: 45px; padding: 0 45px">
+  <v-container style="height: 45px; padding: 0 45px" class="score-bar">
     <v-row class="justify-space-between align-center fill-height">
       <div class="fire">
         {{ streak }}
@@ -23,6 +23,9 @@
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
+}
+.score-bar {
+  margin-top: env(safe-area-inset-top) !important;
 }
 </style>
 

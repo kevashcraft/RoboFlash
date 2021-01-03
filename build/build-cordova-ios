@@ -1,7 +1,7 @@
 /bin/build-app
 rm -rf /cordova-ios/*
 cd /cordova-ios
-cordova create robot_flash com.kevapps.robot_flash "Flashcards"
+cordova create robot_flash com.logicdudes.robot_flash "RoboFlash"
 cd robot_flash
 cordova platform add ios
 cordova plugin add cordova-plugin-file

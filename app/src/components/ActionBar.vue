@@ -1,10 +1,10 @@
 <template>
-  <v-container style="height: 65px; padding: 0 55px">
+  <v-container style="height: 65px; padding: 0 55px" class="action-bar">
     <v-row class="justify-space-between align-center fill-height">
       <v-menu top :offset-y="true" :nudge-top="25" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on" color="blue" @click="langOptionGroup = false">
-            <img :src="learningLanguage.icon" width="24">
+            <img :src="learningLanguage.icon" style="max-width: 24px">
             <span style="margin-left: 8px; color: white">{{ deck.name }}</span>
           </v-btn>
         </template>
@@ -13,7 +13,7 @@
           <v-list-group v-model="langOptionGroup">
             <template v-slot:activator>
               <v-list-item-icon>
-                <img :src="learningLanguage.icon" width="24">
+                <v-img :src="learningLanguage.icon" max-width="24" contain></v-img>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-subtitle>{{langs.learning[referenceLanguage]}}</v-list-item-subtitle>
@@ -24,7 +24,7 @@
               @click="setLanguage(l.slug); langOptionGroup=false"
               :class="l.slug === learningLanguage.slug ? 'deck-selected' : ''">
               <v-list-item-icon>
-                <img :src="l.icon" height="32">
+                <img :src="l.icon" style="max-height: 32px">
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="l.title"></v-list-item-title>
@@ -79,7 +79,7 @@
               >
               <v-list-item-icon>
                 <v-icon v-if="option.icon">{{option.icon}}</v-icon>
-                <img v-if="option.img" :src="option.img" height="32">
+                <img v-if="option.img" :src="option.img" style="max-height: 32px">
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="option.title"></v-list-item-title>
@@ -133,6 +133,9 @@
 <style>
 .deck-selected {
   background: rgb(0,0,0,.2)
+}
+.action-bar {
+  padding-bottom: env(safe-area-inset-bottom) !important;
 }
 </style>
 

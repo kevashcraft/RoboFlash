@@ -149,13 +149,16 @@ export default new Vuex.Store({
       // update local deck list
       for (let idx in deckList) {
         const deck = deckList[idx]
-        const localDeck = state.deckList.find(deck => deck.slug === deck.slug)
+        // console.log('deck', deck)
+        const localDeck = state.deckList.find(d => d.slug === deck.slug)
+        // console.log('localDeck', localDeck)
         if (localDeck && localDeck.version >= deck.version) deckList[idx] = localDeck
         // if running in web, mark all as not yet downloaded
         if (!state.isApp) {
           deckList[idx].downloaded = false
         }
       }
+      // console.log('deckList', deckList)
       state.deckList = deckList
     },
     setDialog (state, dialog) {
@@ -192,10 +195,10 @@ export default new Vuex.Store({
       if (state.cardIdx >= cards.length - 1) {
         if (state.testModeEnabled) {
           if (state.testMode) {
-            const score = Math.round(state.scores.filter(score => score).length / state.scores.length * 100)
-            if (!state.deckList[state.deck.name].bestScore || score > state.deckList[state.deck.name].bestScore) {
-              state.deckList[state.deck.name].bestScore = score
-            }
+            // const score = Math.round(state.scores.filter(score => score).length / state.scores.length * 100)
+            // if (!state.deckList[state.deck.name].bestScore || score > state.deckList[state.deck.name].bestScore) {
+            //   state.deckList[state.deck.name].bestScore = score
+            // }
             if (state.testCompleteDialogEnabled) state.dialog = 'testComplete'
           } else {
             state.snackbarTimeout = 1500
@@ -257,11 +260,12 @@ export default new Vuex.Store({
     // },
     async getDeckList({ commit }) {
       try {
-        const request = await axios.get('https://storage.googleapis.com/rlf-decks/decklist.json')
+        const request = await axios.get('https://rlf-decks.storage.googleapis.com/decklist.json')
         const deckList = request.data
         if (typeof deckList !== 'object' || !Object.keys(deckList).length) {
           throw Error('invalid deck list')
         }
+        // console.log('deckList', deckList)
         commit('setDeckList', deckList)
       } catch (error) {
         console.log('error getting deck list', error)
@@ -280,7 +284,7 @@ export default new Vuex.Store({
         commit('setProposedDeck', {})
         // const bigDownload = parseInt(deck.size) > 5000000
         commit('setDownloadProgress', 0)
-        const request = await axios.get(`https://storage.googleapis.com/rlf-decks/${filename}`, {
+        const request = await axios.get(`https://rlf-decks.storage.googleapis.com/${filename}`, {
           onDownloadProgress: progress => {
             const downloadProgress = Math.round(progress.loaded / (parseInt(deck.size) * 1.4) * 100)
             commit('setDownloadProgress', downloadProgress)

@@ -14,14 +14,14 @@
       {{ langs.skip[referenceLanguage] }}
       <v-icon right color="blue">mdi-arrow-right</v-icon>
     </v-btn>
-    <v-row class="flex-column fill-height" dense>
+    <v-row class="flex-column fill-height" dense style="flex-wrap: nowrap">
       <v-row class="flex-grow-0 justify-center align-end question">
         <p :class="{'smaller-text': hasBigWord(card.question)}">{{ card.question }}</p>
       </v-row>
       <v-row v-if="!testMode" class="flex-grow-0 flex-shrink-1 justify-center align-center image">
         <v-img :class="{blurredimg: blurHint}" v-show="!hideHint" :src="card.image" contain draggable="false" style="max-width: 80%; max-height: 80%"></v-img>
       </v-row>
-      <v-row v-if="testMode" class="flex-grow-1 justify-center align-center">
+      <v-row v-if="testMode" class="flex-grow-1 justify-center align-center" style="padding: 15px">
         <v-col cols="6" class="test-images" v-for="(image, idx) in card.answerOptions" :key="idx" @click="guess(idx)">
           <v-img :src="image" draggable="false" class="test-image"></v-img>
         </v-col>
@@ -188,7 +188,7 @@ export default {
         }
       }
 
-      await new Promise(r => setTimeout(r, 150))
+      // await new Promise(r => setTimeout(r, 150))
       this.addScore(correctAnswer)
       this.nextCard()
     },

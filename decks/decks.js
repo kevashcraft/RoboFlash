@@ -123,6 +123,7 @@ async function deploy (decks) {
         const deck = decks[deckIdx]
         deckList.push(deck)
     }
+    console.log('JSON.stringify(deckList)', JSON.stringify(deckList))
     await storage.bucket(decksBucket).file('decklist.json').save(JSON.stringify(deckList), {gzip: true, resumable: false})
 
     for (let deckIdx=0; deckIdx<decks.length; deckIdx++) {

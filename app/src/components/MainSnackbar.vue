@@ -1,7 +1,7 @@
 <template>
   <v-snackbar v-model="opened" top shaped :timeout="snackbarTimeout">
     <v-row>
-      <img src="@/assets/rate-us-robot.png" width="32px" style="margin: 0 10px"/>
+      <v-img src="@/assets/rate-us-robot.png" style="margin: 0 10px"  max-width="32px"></v-img>
       <span style="margin-left: 15px; font-weight: bold">{{snackbar}}</span>
     </v-row>
   </v-snackbar>
