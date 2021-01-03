@@ -1,0 +1,4 @@
+**/node_modules
+/app/dist
+/cordova-ios
+/dist

@@ -38,10 +38,10 @@ service:
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: robot-language-flashcards
+    kubernetes.io/ingress.global-static-ip-name: roboflash-app
     networking.gke.io/managed-certificates: robot-language-flashcards
   hosts:
-    - host: app.robot-language-flashcards.com
+    - host: roboflash.app
       paths:
         - /*
 

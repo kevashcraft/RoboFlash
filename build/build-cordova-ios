@@ -7,6 +7,7 @@ cordova platform add ios
 cordova plugin add cordova-plugin-file
 cordova plugin add cordova-plugin-device
 cordova plugin add cordova-plugin-screen-orientation
+cordova plugin add cordova-plugin-purchase
 cp /res/icon.png ./
 cp /res/splash.png ./
 cordova-icon

@@ -2,6 +2,7 @@
   <v-app>
     <v-container class="fill-height" style="padding: 0; max-width: 768px">
       <v-row class="fill-height flex-column">
+        <ScoreBar class="flex-grow-0" />
         <FlashCards class="flex-grow-1 flashcards" />
         <ProgressBars class="flex-grow-0" />
         <ActionBar class="flex-grow-0" @showDebug="showDebug" />
@@ -40,6 +41,7 @@
 
 <script>
 import ActionBar from './components/ActionBar'
+import ScoreBar from './components/ScoreBar'
 import FlashCards from './components/FlashCards'
 import ProgressBars from './components/ProgressBars'
 import ConfirmDownload from './components/ConfirmDownload'
@@ -53,7 +55,7 @@ import FeedbackDialog from './components/FeedbackDialog'
 import AppDownloadSnackbar from './components/AppDownloadSnackbar'
 import MainSnackbar from './components/MainSnackbar'
 
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import moment from 'moment'
 
 import firebase from './plugins/firebase'
@@ -63,6 +65,7 @@ export default {
 
   components: {
     ActionBar,
+    ScoreBar,
     FlashCards,
     ProgressBars,
     ConfirmDownload,
@@ -101,7 +104,17 @@ export default {
       }
     }, 500)
 
-    if (!this.$store.state.prevActiveDate || moment().diff(moment(this.$store.state.prevActiveDate), 'days') > 1) {
+    try {
+        const daydiff = moment().diff(moment(this.$store.state.prevActiveDate), 'days')
+        console.log('daydiff', daydiff)
+        if (daydiff === 1) {
+          this.setGeneric({prop: 'streak', value: this.$store.state.streak + 1})
+        } else {
+          this.setGeneric({prop: 'streak', value: 1 })
+          this.$store.commit('resetActiveCardCount')
+        }
+    } catch (error) {
+      console.log('error with app.vue prevactivedate check', error)
       this.$store.commit('resetActiveCardCount')
     }
     this.$store.commit('setPrevActiveDate', moment().format('YYYY-MM-DD'))
@@ -116,6 +129,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['setGeneric']),
     showDebug () {
       this.debugInfo = window.debugInfo.join('<br>')
       this.showDebugDialog = true

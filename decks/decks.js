@@ -112,7 +112,7 @@ async function populate(decks) {
             let card = deck.cards[cardIdx]
             await getAudio(card)
             await getImages(deck.type, card)
-            await new Promise(r => setTimeout(r, 500))
+            // await new Promise(r => setTimeout(r, 500))
         }
     }
 }
@@ -189,6 +189,7 @@ async function server (decks) {
             const searchResults = await gcsReadFile('searches', card.slug, 'json')
             for (let idx in searchResults) {
                 const resInfo = searchResults[idx]
+                // console.log('resInfo', resInfo)
                 let ext = deck.type === 'gifs' ? 'gif'
                     : resInfo.previewURL.split('.').pop().toLowerCase()
         
@@ -204,6 +205,8 @@ async function server (decks) {
                         filename,
                         selected: filename === selected
                     })
+                } else {
+                    console.log('images does not exist', filename)
                 }
             }
             cards.push(card)
@@ -306,12 +309,15 @@ async function getImages(imgType, card) {
                 const imgReqUrl = imgType === 'gifs' ? resInfo.images.fixed_width.url
                     : resInfo.webformatURL
                 console.log('getting image', imgReqUrl)
-                await new Promise(r => setTimeout(r, 500))
+                await new Promise(r => setTimeout(r, 1500))
                 const imgReq = await axios.get(imgReqUrl, {responseType: 'arraybuffer'})
                 // save both, for fast preview and already encoded
+                console.log('saving to gcs1')
                 await gcsFileSave('images', filename, imgReq.data)
                 const imgData = `data:image/${ext};base64,` + Buffer.from(imgReq.data, 'binary').toString('base64')
+                console.log('saving to gcs2')
                 await gcsFileSave('images', imgHash, imgData)
+                console.log('image retrieved')
             } catch (error) {
                 console.log("Missing GIFY URL", error)
             }
@@ -342,6 +348,7 @@ async function getAudio(card) {
                         speakingRate: '.9'
                     }
                 }
+                await new Promise(r => setTimeout(r, 500))
                 let [response] = await ttsClient.synthesizeSpeech(request)
                 const audioData = 'data:audio/mp3;base64,' + response.audioContent.toString('base64')
                 await gcsFileSave('audio', filename, audioData)

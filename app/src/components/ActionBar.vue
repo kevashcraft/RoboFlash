@@ -1,5 +1,5 @@
 <template>
-  <v-container style="height: 55px; padding: 0 55px">
+  <v-container style="height: 65px; padding: 0 55px">
     <v-row class="justify-space-between align-center fill-height">
       <v-menu top :offset-y="true" :nudge-top="25" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
@@ -335,6 +335,14 @@ export default {
             },
             slug: 'alpha',
             icon: 'mdi-sort-alphabetical-ascending-variant'
+          }, {
+            titles: {
+              en: 'Initial',
+              es: 'Inicial',
+              ko: '머리 글자'
+            },
+            slug: 'sheet',
+            icon: 'mdi-sort-numeric-ascending'
           }, {
             titles: {
               en: 'Least Viewed',

@@ -1,3 +1,7 @@
+# fullname: robot-language-flashcards
+# shortname: robot_flash
+# displayname: roboflash
+
 default: dev
 
 .PHONY: build decks

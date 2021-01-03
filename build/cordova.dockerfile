@@ -17,7 +17,7 @@ RUN cd /tmp && \
 
 RUN mkdir -p /cordova
 WORKDIR /cordova
-RUN cordova create robot_flash com.kevapps.robot_flash "Flashcards"
+RUN cordova create robot_flash com.logicdudes.robot_flash robot_flash
 
 WORKDIR /cordova/robot_flash
 RUN cordova telemetry off
@@ -25,6 +25,7 @@ RUN cordova platform add android
 RUN cordova plugin add cordova-plugin-file
 RUN cordova plugin add cordova-plugin-device
 RUN cordova plugin add cordova-plugin-screen-orientation
+RUN cordova plugin add cordova-plugin-purchase
 RUN cordova build; exit 0
 
 RUN mkdir -p /dist # mounted volume

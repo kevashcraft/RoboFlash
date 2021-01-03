@@ -104,6 +104,7 @@ export default new Vuex.Store({
     prevActiveDate: '',
     globalCardCount: 0,
     activeCardCount: 0,
+    streak: 0,
 
     welcomeDialogDisplayed: false,
     firstTestDialogDisplayed: false,
@@ -111,6 +112,7 @@ export default new Vuex.Store({
     rateUsDialogEnabled: true,
     dialog: 'none',
     snackbar: '',
+    snackbarTimeout: 3500,
 
     deckList: [],
     proposedDeck: {},
@@ -123,7 +125,7 @@ export default new Vuex.Store({
     testMode: false,
     scores: [],
     
-    sortMethod: 'alpha',
+    sortMethod: 'sheet',
     showHints: 'always',
     showAnswers: 'onTap',
 
@@ -196,6 +198,7 @@ export default new Vuex.Store({
             }
             if (state.testCompleteDialogEnabled) state.dialog = 'testComplete'
           } else {
+            state.snackbarTimeout = 1500
             state.snackbar = langs.ycts[state.referenceLanguage]
             if (!state.firstTestDialogDisplayed) state.dialog = 'firstTest'
             state.scores = []
@@ -336,6 +339,12 @@ export default new Vuex.Store({
         cards.sort((a, b) => {
           return a.words[state.learningLanguage].localeCompare(b.words[state.learningLanguage], 'es', {'sensitivity': 'base'})
         })
+      } else if (state.sortMethod === 'sheet') {
+        cards.sort((a, b) => {
+          if (a.idx > b.idxiewCount) return 1
+          if (a.idx < b.idxiewCount) return -1
+          return 0
+        })
       } else if (state.sortMethod === 'shuffle') {
         shuffleArray(cards)
       } else if (state.sortMethod === 'leastViewed') {
@@ -388,15 +397,20 @@ export default new Vuex.Store({
         if (!state.questionViewCounts[card.question]) state.questionViewCounts[card.question] = 0
         state.questionViewCounts[card.question]++
       }
+
       return [card]
     },
     deckList (state) {
       return state.deckList.map(deck => Object.assign({name: deck.titles[state.referenceLanguage], bestScore: 0}, deck))
     },
     deck (state) {
-      const deck =  Object.assign({name: state.deck.titles[state.referenceLanguage], bestScore: 0}, state.deck)
-      console.log('deck', deck)
-      return deck
+      try {
+        const deck =  Object.assign({name: state.deck.titles[state.referenceLanguage], bestScore: 0}, state.deck)
+        return deck
+      } catch (error) {
+        console.log('error', error)
+        return {}
+      }
     },
     languages () {
       return languages
