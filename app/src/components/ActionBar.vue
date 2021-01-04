@@ -136,6 +136,7 @@
 }
 .action-bar {
   padding-bottom: env(safe-area-inset-bottom) !important;
+  /* padding-bottom: 25px !important; */
 }
 </style>
 

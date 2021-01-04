@@ -1,5 +1,5 @@
 <template>
-  <v-container ref="card" class="elevation-6" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0" @click="action">
+  <v-container ref="card" class="elevation-6 flashcard" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: auto" @click="action">
     <span v-if="testMode" style="position: absolute; top: 15px; left: 15px; color: rgba(255, 0, 0, .80); font-weight: bold">Test</span>
     <v-btn icon v-if="!testMode && cardIdx > 0" style="position: absolute; top: 15px; left: 15px" @click="prevCard">
       <v-icon>mdi-arrow-left</v-icon>
@@ -14,8 +14,8 @@
       {{ langs.skip[referenceLanguage] }}
       <v-icon right color="blue">mdi-arrow-right</v-icon>
     </v-btn>
-    <v-row class="flex-column fill-height" dense style="flex-wrap: nowrap">
-      <v-row class="flex-grow-0 justify-center align-end question">
+    <v-row class="flex-column fill-height justify-space-around" dense style="flex-wrap: nowrap">
+      <v-row class="flex-grow-0 justify-center align-end question" style="margin-top: 35px">
         <p :class="{'smaller-text': hasBigWord(card.question)}">{{ card.question }}</p>
       </v-row>
       <v-row v-if="!testMode" class="flex-grow-0 flex-shrink-1 justify-center align-center image">
@@ -26,7 +26,7 @@
           <v-img :src="image" draggable="false" class="test-image"></v-img>
         </v-col>
       </v-row>
-      <v-row v-if="!testMode" class="flex-grow-0 justify-center align-start answer">
+      <v-row v-if="!testMode" class="flex-grow-0 justify-center align-start answer" style="margin-bottom: 25px">
         <p v-show="!hideAnswer" :class="{blurred: blurAnswer}">{{ card.answer }}</p>
       </v-row>
     </v-row>
@@ -37,6 +37,11 @@
 </template>
 
 <style lang="scss" scoped>
+.flashcard {
+  @media (min-width: 400px) {
+    margin: 25px;   
+  }
+}
 .question {
   height: 20%;
   p {

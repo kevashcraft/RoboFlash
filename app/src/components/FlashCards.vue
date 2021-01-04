@@ -11,7 +11,7 @@
   top: 5px;
   right: 15px;
   bottom: 5px;
-  left: 15px
+  left: 15px;
 }
 .list-item {
   // display: block;
