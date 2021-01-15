@@ -120,8 +120,17 @@
           </v-list-item> -->
           <v-divider></v-divider>
           <v-divider></v-divider>
-          <v-list-item @click="showLicenses">
-            <v-list-item-title>Licenses</v-list-item-title>
+          <v-list-item>
+            <v-list-item-title>
+              <v-row>
+                <v-col>
+                  <v-btn text @click="showLicenses">Licenses</v-btn>
+                </v-col>
+                <v-col v-show="isApp">
+                  <v-btn text @click="rateUs">Rate Us</v-btn>
+                </v-col>
+              </v-row>
+            </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -149,7 +158,8 @@ export default {
     ...mapState([
       'audioEnabled', 'darkTheme', 'referenceLanguage',
       'testModeEnabled', 'testCompleteDialogEnabled',
-      'showAnswers', 'showHints', 'sortMethod'
+      'showAnswers', 'showHints', 'sortMethod',
+      'isApp', 'androidApp', 'iOSApp'
     ]),
     ...mapGetters(['deckList', 'learningLanguages', 'learningLanguage', 'deck']),
     menu () {
@@ -179,6 +189,21 @@ export default {
     },
     showLicenses () {
       this.setGeneric({prop: 'dialog', value: 'licenses'})
+    },
+    rateUs () {
+      try {
+        console.log('window.device.platform', window.device.platform)
+      } catch (error) {
+        console.log('no platform available')
+      }
+      if (this.androidApp) {
+        console.log('opening android rating')
+        window.open('market://details?id=com.logicdudes.robot_flash')
+      }
+      if (this.iOSApp) {
+        console.log('opening ios rating')
+        window.open('https://apps.apple.com/us/app/roboflash/id1547172369?action=write-review&ign-itsct=apps_box&ign-itscg=30200')
+      }
     },
     optionAction (item, option) {
       if (item === 'sort') {

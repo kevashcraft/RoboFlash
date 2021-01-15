@@ -39,13 +39,12 @@ export default {
   name: 'RateUsDialog',
 
   computed: {
-    ...mapState(['isApp', 'dialog']),
+    ...mapState(['isApp', 'androidApp', 'iOSApp', 'dialog']),
     ...mapGetters(['score'])
   },
 
   mounted () {
-    // this.androidApp = this.isApp && device.platform === 'Android'
-    // this.iOSApp = this.isApp && device.platform === 'iOS'
+    // console.log('device', device)
   },
 
   watch: {
@@ -64,11 +63,11 @@ export default {
     rateUs () {
       this.noShow()
       if (this.androidApp) {
-        window.open('market://details?id=com.kevapps.spanish_photo_flash')
+        window.open('market://details?id=com.logicdudes.robot_flash')
       }
-      // if (this.iOSApp) {
-      //   window.open('market://details?id=com.kevapps.spanish_photo_flash')
-      // }
+      if (this.iOSApp) {
+        window.open('itms-apps://apps.apple.com/us/app/roboflash/id1547172369?itsct=apps_box&itscg=30200&action=write-review')
+      }
     },
     noShow () {
       this.setGeneric({prop: 'rateUsDialogEnabled', value: false })
@@ -77,8 +76,6 @@ export default {
   },
 
   data: () => ({
-    androidApp: true,
-    iOSApp: false,
     opened: false
   }),
 

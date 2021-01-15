@@ -98,6 +98,8 @@ const langs = {
 export default new Vuex.Store({
   state: {
     isApp: !!window.cordova,
+    androidApp: false,
+    iOSApp: false,
     referenceLanguage: 'en',
     learningLanguage: 'es',
     audioSlug: 'es1',

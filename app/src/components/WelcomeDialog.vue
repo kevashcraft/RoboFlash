@@ -10,7 +10,8 @@
             <img src="@/assets/robot-s.png" style="max-width: 95%">
           </v-col>
           <v-col cols="8">
-            <p>{{ langs.haw[referenceLanguage] }} <strong>{{ langs.afap[referenceLanguage] }}</strong></p>
+            <p>{{ langs.haw[referenceLanguage] }} </p>
+            <p>{{ langs.had[referenceLanguage] }} <strong>{{ langs.afap[referenceLanguage] }}</strong></p>
           </v-col>
         </v-row>
         <v-row class="justify-center" style="margin-top: 25px">

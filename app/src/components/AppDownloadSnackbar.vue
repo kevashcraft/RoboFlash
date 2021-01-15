@@ -23,9 +23,12 @@ export default {
   computed: mapState(['isApp']),
 
   mounted () {
-    if (!this.isApp && window.screen.width > 1200) {
+    console.log('window.screen.width', window.screen.width)
+    if (window.screen.width > 1200) {
       setTimeout(() => {
-        this.opened = true
+        if (!this.isApp) {
+          this.opened = true
+        }
       }, 15000)
     }
   },

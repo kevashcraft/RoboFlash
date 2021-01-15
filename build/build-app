@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /app
 cp public/index.html.cordova public/index.html
-cp public/index.html.web public/index.html
 npm run build
+cp public/index.html.web public/index.html
 chown 1000:1000 public/index.html

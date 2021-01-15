@@ -60,6 +60,8 @@ import moment from 'moment'
 
 import firebase from './plugins/firebase'
 
+/* global device */
+
 export default {
   name: 'App',
 
@@ -135,6 +137,10 @@ export default {
       this.showDebugDialog = true
     },
     async init () {
+      this.$store.commit('setGeneric', {prop: 'isApp', value: !!window.cordova})
+      this.$store.commit('setGeneric', {prop: 'androidApp', value: device.platform === 'Android'})
+      this.$store.commit('setGeneric', {prop: 'iOSApp', value: device.platform === 'iOS'})
+
       firebase.init()
       const userAgent = navigator.userAgent.toLowerCase();
       window.debugInfo.push('userAgent - ' + userAgent)
