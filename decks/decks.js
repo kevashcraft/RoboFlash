@@ -27,14 +27,15 @@ const DeckColumns = {
     slug: 0,
     version: 1,
     status: 2,
-    type: 3
+    type: 3,
+    emoji: 4
 }
 axios.defaults.headers.common['User-Agent'] = 'Robot Language Flashcards - contact@robot-language-flashcards.com';
 
 const languages = [
     {
         slug: 'en',
-        deckNameCol: 4,
+        deckNameCol: 5,
         audios: [
             {
                 slug: 'en1',
@@ -50,7 +51,7 @@ const languages = [
     },
     {
         slug: 'es',
-        deckNameCol: 6,
+        deckNameCol: 7,
         audios: [
             {
                 slug: 'es1',
@@ -65,7 +66,7 @@ const languages = [
     },
     {
         slug: 'ko',
-        deckNameCol: 8,
+        deckNameCol: 9,
         audios: [
             {
                 slug: 'ko1',
@@ -125,7 +126,7 @@ async function deploy (decks) {
     }
     console.log('JSON.stringify(deckList)', JSON.stringify(deckList))
     await storage.bucket(decksBucket).file('decklist.json').save(JSON.stringify(deckList), {gzip: true, resumable: false})
-
+    // return
     for (let deckIdx=0; deckIdx<decks.length; deckIdx++) {
         console.log('deckIdx', deckIdx)
         const deck = decks[deckIdx]
@@ -229,7 +230,7 @@ async function server (decks) {
 async function getDeckList(deckDataSpreadsheet) {
     const sheet = deckDataSpreadsheet.sheetsByTitle['Deck List']
 
-    await sheet.loadCells(`A1:I${MAX_DECK_ROWS}`);
+    await sheet.loadCells(`A1:J${MAX_DECK_ROWS}`);
 
     const deckList = []
     for (let index=0; index<MAX_DECK_ROWS; index++) {

@@ -37,9 +37,13 @@ cordova: cordova_build
 			-it \
 			-v $(shell pwd)/cordova-ios:/cordova-ios \
 			-v $(shell pwd)/dist:/dist \
-			-v $(shell pwd)/res:/res \
 			-v $(shell pwd)/app/src:/app/src \
 			-v $(shell pwd)/app/public:/app/public \
+			-v $(shell pwd)/res:/res \
+			-v $(shell pwd)/build/build-app:/bin/build-app \
+			-v $(shell pwd)/build/build-resources:/bin/build-resources \
+			-v $(shell pwd)/build/build-apk:/bin/build-apk \
+			-v $(shell pwd)/build/build-cordova-ios:/bin/build-cordova-ios \
 			-v $(shell pwd)/build/config-ios.xml:/cordova/robot_flash/config-ios.xml \
 			-v $(shell pwd)/build/config.xml:/cordova/robot_flash/config.xml \
 								robot_flash_cordova bash
@@ -51,12 +55,15 @@ cordova_prod: cordova_build
 			-v $(shell pwd)/secrets:/secrets \
 			-v $(shell pwd)/app/src:/app/src \
 			-v $(shell pwd)/app/public:/app/public \
+			-v $(shell pwd)/res:/res \
+			-v $(shell pwd)/build/build-app:/bin/build-app \
 			-v $(shell pwd)/build/config.xml:/cordova/robot_flash/config.xml \
 								robot_flash_cordova bash -c "\
 																		build-app; \
 																		cd /cordova/robot_flash; \
 																		rm -rf www; \
 																		mv /app/dist www; \
+																		build-resources; \
 																		cordova build android \
 								--release \
 								-- \

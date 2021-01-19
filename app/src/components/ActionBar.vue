@@ -38,7 +38,7 @@
             @click="deckChange(d)"
             :class="d.slug === deck.slug ? 'deck-selected' : ''">
             <v-list-item-content>
-              <v-list-item-title v-text="d.name" style="font-weight: 500"></v-list-item-title>
+              <v-list-item-title style="font-weight: 500"><span style="margin-right:3px">{{d.emoji }}</span> {{ d.name }}</v-list-item-title>
               <v-list-item-subtitle v-if="d.bestScore" :style="getBestScoreStyle(d.bestScore)">{{d.bestScore}}%</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-icon>

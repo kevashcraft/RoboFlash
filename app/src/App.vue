@@ -107,14 +107,14 @@ export default {
     }, 500)
 
     try {
-        const daydiff = moment().diff(moment(this.$store.state.prevActiveDate), 'days')
-        console.log('daydiff', daydiff)
-        if (daydiff === 1) {
-          this.setGeneric({prop: 'streak', value: this.$store.state.streak + 1})
-        } else {
-          this.setGeneric({prop: 'streak', value: 1 })
-          this.$store.commit('resetActiveCardCount')
-        }
+      const daydiff = moment().diff(moment(this.$store.state.prevActiveDate), 'days')
+      console.log('daydiff', daydiff)
+      if (daydiff === 1) {
+        this.setGeneric({prop: 'streak', value: this.$store.state.streak + 1})
+      } else if (daydiff > 1 || isNaN(daydiff)) {
+        this.setGeneric({prop: 'streak', value: 1 })
+        this.$store.commit('resetActiveCardCount')
+      }
     } catch (error) {
       console.log('error with app.vue prevactivedate check', error)
       this.$store.commit('resetActiveCardCount')
@@ -137,9 +137,12 @@ export default {
       this.showDebugDialog = true
     },
     async init () {
+      const isApp = !!window.cordova
+      const androidApp = isApp && device && device.platform === 'Android'
+      const iOSApp = isApp && device && device.platform === 'iOS'
       this.$store.commit('setGeneric', {prop: 'isApp', value: !!window.cordova})
-      this.$store.commit('setGeneric', {prop: 'androidApp', value: device.platform === 'Android'})
-      this.$store.commit('setGeneric', {prop: 'iOSApp', value: device.platform === 'iOS'})
+      this.$store.commit('setGeneric', {prop: 'androidApp', value: androidApp})
+      this.$store.commit('setGeneric', {prop: 'iOSApp', value: iOSApp})
 
       firebase.init()
       const userAgent = navigator.userAgent.toLowerCase();

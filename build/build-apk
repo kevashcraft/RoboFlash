@@ -3,5 +3,6 @@
 cd /cordova/robot_flash
 rm -rf www
 mv /app/dist www
+/bin/build-resources
 cordova build android
 cp /cordova/robot_flash/platforms/android/app/build/outputs/apk/debug/app-debug.apk /dist/

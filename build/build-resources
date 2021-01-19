@@ -1,0 +1,7 @@
+#!/bin/bash
+mkdir -p resources/android
+cp /res/icon.png resources/android/
+cp /res/splash.png resources/android/
+cp /res/foreground.png resources/android/
+
+cordova-res android --icon-background-source '#FFFFFF' --icon-foreground-source android/foreground.png
