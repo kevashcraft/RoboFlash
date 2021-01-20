@@ -1,7 +1,9 @@
 #!/bin/bash
 mkdir -p resources/android
-cp /res/icon.png resources/android/
-cp /res/splash.png resources/android/
-cp /res/foreground.png resources/android/
+#cp /res/icon.png resources/android/
+#cp /res/splash.png resources/android/
+cp /res/foreground.png resources/android/icon-foreground.png
 
-cordova-res android --icon-background-source '#FFFFFF' --icon-foreground-source android/foreground.png
+#cordova-res android --type adaptive-icon --icon-background-source '#FFFFFF' --icon-foreground-source foreground.png
+
+cordova-res android --type adaptive-icon --icon-background-source '#FFFFFF'
