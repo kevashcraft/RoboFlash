@@ -3,7 +3,7 @@ mkdir -p resources/android
 #cp /res/icon.png resources/android/
 #cp /res/splash.png resources/android/
 cp /res/foreground.png resources/android/icon-foreground.png
-
+cp /res/smallIcon.png platforms/android/app/src/main/res/mipmap-hdpi/robot.png
 #cordova-res android --type adaptive-icon --icon-background-source '#FFFFFF' --icon-foreground-source foreground.png
 
 cordova-res android --type adaptive-icon --icon-background-source '#FFFFFF'

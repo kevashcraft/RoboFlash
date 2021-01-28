@@ -8,6 +8,7 @@ cordova plugin add cordova-plugin-file
 cordova plugin add cordova-plugin-device
 cordova plugin add cordova-plugin-screen-orientation
 cordova plugin add cordova-plugin-purchase
+cordova plugin add cordova-plugin-app-review
 cp /cordova/robot_flash/config-ios.xml /cordova-ios/robot_flash/config.xml
 
 mkdir -p resources/ios

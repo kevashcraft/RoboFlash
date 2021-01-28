@@ -26,6 +26,8 @@ RUN cordova plugin add cordova-plugin-file
 RUN cordova plugin add cordova-plugin-device
 RUN cordova plugin add cordova-plugin-screen-orientation
 RUN cordova plugin add cordova-plugin-purchase
+RUN cordova plugin add cordova-plugin-app-review
+RUN cordova plugin add cordova-plugin-local-notification
 RUN cordova build; exit 0
 
 RUN mkdir -p /dist # mounted volume

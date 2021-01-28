@@ -13,7 +13,7 @@ const vuexLocal = new VuexPersistence({
 
 const localDecks = {}
 let cards = []
-
+let currentCard
 /* global LocalFileSystem */
 
 async function readFile(directory, filename) {
@@ -106,6 +106,7 @@ export default new Vuex.Store({
     prevActiveDate: '',
     globalCardCount: 0,
     activeCardCount: 0,
+    increaseStreakOnChange: false,
     streak: 0,
 
     welcomeDialogDisplayed: false,
@@ -215,6 +216,25 @@ export default new Vuex.Store({
         state.cardIdx = 0
       } else {
         state.cardIdx += 1
+      }
+      if (!state.testMode) {
+        state.activeCardCount += 1
+        state.globalCardCount += 1
+        if (state.isApp && state.globalCardCount % 98 === 0 && state.activeCardCount > 7) {
+          if (state.dialog === 'none' && state.rateUsDialogEnabled) {
+            state.dialog = 'rateUs'
+          }
+        }
+        if (!state.questionViewCounts[currentCard.question]) state.questionViewCounts[currentCard.question] = 0
+        state.questionViewCounts[currentCard.question]++
+        console.log('CHECKING!')
+        console.log('state.activeCardCount', state.activeCardCount)
+        if (state.increaseStreakOnChange && state.activeCardCount > 0) {
+          state.streak += 1
+          console.log('increasing!', state.streak, state.activeCardCount)
+          state.increaseStreakOnChange = false
+        }
+  
       }
     }, 
     prevCard (state) {
@@ -373,6 +393,7 @@ export default new Vuex.Store({
   },
   getters: {
     card (state) {
+      console.log('state.activeCardCount22', state.activeCardCount)
       const card = cards[state.cardIdx]
       if (!card) return []
       card.question = card.words[state.learningLanguage]
@@ -392,18 +413,9 @@ export default new Vuex.Store({
             card.answerOptions.push(cards[optionIdx].image)
           }
         }
-      } else {
-        state.activeCardCount += 1
-        state.globalCardCount += 1
-        if (state.isApp && state.globalCardCount % 98 === 0 && state.activeCardCount > 7) {
-          if (state.dialog === 'none' && state.rateUsDialogEnabled) {
-            state.dialog = 'rateUs'
-          }
-        }
-        if (!state.questionViewCounts[card.question]) state.questionViewCounts[card.question] = 0
-        state.questionViewCounts[card.question]++
       }
 
+      currentCard = card
       return [card]
     },
     deckList (state) {

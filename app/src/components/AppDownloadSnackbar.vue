@@ -7,8 +7,13 @@
       </v-btn>
     </v-row>
     <v-row class="justify-center">
-      <a href="https://play.google.com/store/apps/details?id=com.kevapps.spanish_photo_flash" target="_blane">
-        <img src="@/assets/google-play-badge.png" height="75">
+      <a href="https://play.google.com/store/apps/details?id=com.logicdudes.robot_flash" target="_blane">
+        <img src="@/assets/google-play-badge.png" width="200">
+      </a>
+    </v-row>
+    <v-row class="justify-center">
+      <a href="https://apps.apple.com/us/app/roboflash/id1547172369" target="_blane">
+        <img src="@/assets/app-store-badge.png" width="175">
       </a>
     </v-row>
   </v-snackbar>

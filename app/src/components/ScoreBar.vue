@@ -1,7 +1,7 @@
 <template>
   <v-container style="height: 45px; padding: 0 45px" class="score-bar">
     <v-row class="justify-space-between align-center fill-height">
-      <div class="fire">
+      <div class="fire" v-show="streak > 0" :class="{ growing }">
         {{ streak }}
       </div>
     </v-row>
@@ -24,6 +24,12 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
+.growing {
+  background: url('../assets/fire.gif');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 .score-bar {
   margin-top: env(safe-area-inset-top) !important;
 }
@@ -41,8 +47,19 @@ export default {
   },
   methods: {
   },
+  watch: {
+    streak () {
+      if (this.streak) {
+        this.growing = true
+        setTimeout(() => {
+          this.growing = false
+        }, 5500)
+      }
+    }
+  },
 
   data: () => ({
+    growing: false,
     langs: {
     }    
   }),

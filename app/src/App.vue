@@ -60,7 +60,7 @@ import moment from 'moment'
 
 import firebase from './plugins/firebase'
 
-/* global device */
+/* global device, cordova */
 
 export default {
   name: 'App',
@@ -84,9 +84,21 @@ export default {
 
   data: () => ({
     showDebugDialog: false,
-    debugInfo: ''
+    debugInfo: '',
+    langs: {
+      no1t: {
+        en: 'Keep Going!',
+        es: '¡Sigue adelante!',
+        ko: '계속가!'
+      },
+      no1te: {
+        en: `Flash through a set to keep your streak alive. It's fast!`,
+        es: 'Destella a través de un set para mantener viva tu racha. ¡Es rápido!',
+        ko: '연속을 유지하기 위해 세트를 통해 플래시. 빠르다!'
+      }
+    }
   }),
-  computed: mapState(['isApp', 'darkTheme']),
+  computed: mapState(['isApp', 'darkTheme', 'referenceLangauge']),
 
   watch: {
     darkTheme () {
@@ -110,16 +122,22 @@ export default {
       const daydiff = moment().diff(moment(this.$store.state.prevActiveDate), 'days')
       console.log('daydiff', daydiff)
       if (daydiff === 1) {
-        this.setGeneric({prop: 'streak', value: this.$store.state.streak + 1})
+        // this.setGeneric({prop: 'streak', value: this.$store.state.streak + 1})
+        this.setGeneric({prop: 'increaseStreakOnChange', value: true})
       } else if (daydiff > 1 || isNaN(daydiff)) {
-        this.setGeneric({prop: 'streak', value: 1 })
+        this.setGeneric({prop: 'increaseStreakOnChange', value: true})
+        this.setGeneric({prop: 'streak', value: 0 })
         this.$store.commit('resetActiveCardCount')
+      } else {
+        this.setGeneric({prop: 'increaseStreakOnChange', value: false})
       }
     } catch (error) {
       console.log('error with app.vue prevactivedate check', error)
       this.$store.commit('resetActiveCardCount')
     }
+      // this.$store.commit('resetActiveCardCount')
     this.$store.commit('setPrevActiveDate', moment().format('YYYY-MM-DD'))
+    // this.$store.commit('setPrevActiveDate', '2021-01-26')
 
     await this.$store.dispatch('getDeckList')
 
@@ -166,6 +184,21 @@ export default {
       } else {
         this.$store.commit('initDeckDownloaded')
         await this.$store.dispatch('deckChange', this.$store.state.deck)
+      }
+
+      if (isApp) {
+        if (this.$store.state.dailyNotificationId) {
+          cordova.plugins.notification.local.cancel(this.$store.state.dailyNotificationId)
+        }
+        cordova.plugins.notification.local.schedule({
+            title: this.langs.no1t[this.referenceLanguage],
+            text: this.langs.no1te[this.referenceLanguage],
+            color: '#00ff00',
+            smallIcon: 'res://robot',
+            foreground: true,
+            icon: 'https://roboflash.app/robot-feet.png',
+            trigger: { at: moment().add(1, 'day').set({hour: 16}).toDate() }
+        })        
       }
     }
   }

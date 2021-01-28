@@ -1,7 +1,7 @@
 <template>
   <v-container style="height: 65px; padding: 0 55px" class="action-bar">
     <v-row class="justify-space-between align-center fill-height">
-      <v-menu top :offset-y="true" :nudge-top="25" :close-on-content-click="false" v-model="deckMenuOpened">
+      <v-menu top :offset-y="true" :nudge-top="25" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on" color="blue" @click="langOptionGroup = false">
             <img :src="learningLanguage.icon" style="max-width: 24px">
@@ -35,7 +35,7 @@
           <v-subheader style="color: #2995fe"><strong>{{langs.avc[referenceLanguage]}}</strong></v-subheader>
           <v-divider></v-divider>
           <v-list-item v-for="d in deckList" :key="d.name"
-            @click="deckChange(d); deckMenuOpened=false"
+            @click="deckChange(d)"
             :class="d.slug === deck.slug ? 'deck-selected' : ''">
             <v-list-item-content>
               <v-list-item-title style="font-weight: 500"><span style="margin-right:3px">{{d.emoji }}</span> {{ d.name }}</v-list-item-title>
@@ -44,16 +44,18 @@
             <v-list-item-icon>
               <v-icon v-if="!d.downloaded">mdi-cloud-download</v-icon>
               <v-icon v-if="d.downloaded">mdi-check</v-icon>
-            </v-list-item-icon>
+         j   </v-list-item-icon>
           </v-list-item>
 
-        </v-list>
+        </v-list>jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
       </v-menu>
+      <jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
+      jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
 
-      <v-menu :offset-y="true" :nudge-top="35" top :close-on-content-click="false">
-        <template v-slot:activator="{ on, attrs }">
+      <v-menu :offset-y="true" :nudge-top="35" top :close-on-content-click="false">jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
+        <template v-slot:activator="{ on, attrs }">jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
           <v-btn icon v-bind="attrs" v-on="on" @click="closeMenus">
-            <v-icon>mdi-menu</v-icon>
+            <v-icon>mdi-menu</v-icon>jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
           </v-btn>
         </template>
         <v-list>
@@ -191,7 +193,19 @@ export default {
       this.setGeneric({prop: 'dialog', value: 'licenses'})
     },
     rateUs () {
-      this.setGeneric({prop: 'dialog', value: 'rateUs'})
+      try {
+        console.log('window.device.platform', window.device.platform)
+      } catch (error) {
+        console.log('no platform available')
+      }
+      if (this.androidApp) {
+        console.log('opening android rating')
+        window.open('market://details?id=com.logicdudes.robot_flash')
+      }
+      if (this.iOSApp) {
+        console.log('opening ios rating')
+        window.open('https://apps.apple.com/us/app/roboflash/id1547172369?action=write-review&ign-itsct=apps_box&ign-itscg=30200')
+      }
     },
     optionAction (item, option) {
       if (item === 'sort') {
@@ -245,7 +259,6 @@ export default {
 
   data: () => ({
     langOptionGroup: false,
-    deckMenuOpened: false,
     langs: {
       'learning': {
         en: 'Learning',
