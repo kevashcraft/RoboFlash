@@ -187,18 +187,21 @@ export default {
       }
 
       if (isApp) {
-        if (this.$store.state.dailyNotificationId) {
-          cordova.plugins.notification.local.cancel(this.$store.state.dailyNotificationId)
-        }
+        // if (this.$store.state.dailyNotificationId) {
+        //   cordova.plugins.notification.local.cancel(this.$store.state.dailyNotificationId)
+        // }
+        // this.setGeneric({prop: 'dailyNotificationId', value: this.$store.state.dailyNotificationNextId})
         cordova.plugins.notification.local.schedule({
-            title: this.langs.no1t[this.referenceLanguage],
-            text: this.langs.no1te[this.referenceLanguage],
-            color: '#00ff00',
-            smallIcon: 'res://robot',
-            foreground: true,
-            icon: 'https://roboflash.app/robot-feet.png',
-            trigger: { at: moment().add(1, 'day').set({hour: 16}).toDate() }
+          id: this.$store.state.dailyNotificationNextId,
+          title: this.langs.no1t[this.referenceLanguage],
+          text: this.langs.no1te[this.referenceLanguage],
+          color: '#1f3566',
+          smallIcon: 'res://robot',
+          foreground: true,
+          icon: 'https://roboflash.app/robot-feet.png',
+          trigger: { at: moment().add(1, 'day').set({hour: 16}).toDate() }
         })        
+        // this.setGeneric({prop: 'dailyNotificationNextId', value: this.$store.state.dailyNotificationNextId+1})
       }
     }
   }

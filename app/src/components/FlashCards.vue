@@ -1,8 +1,11 @@
 <template>
   <v-container style="padding: 0; position: relative;">
-    <transition-group name="list" class="card_container" tag="div">
+    <transition-group v-if="!iOSApp" name="list" class="card_container" tag="div">
       <FlashCard v-for="c in card" :key="c.idx" :card="c" />
     </transition-group>
+    <div v-if="iOSApp">
+      <FlashCard v-for="c in card" :key="c.idx" :card="c" />
+    </div>
   </v-container>
 </template>
 <style lang="scss">
@@ -48,14 +51,15 @@
 
 <script>
 import FlashCard from './FlashCard'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'FlashCards',
   components: { FlashCard },
 
   computed: {
-    ...mapGetters(['card'])
+    ...mapGetters(['card']),
+    ...mapState(['iOSApp'])
   }
 }
 </script>

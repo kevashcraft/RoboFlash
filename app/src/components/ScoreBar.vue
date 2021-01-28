@@ -53,7 +53,7 @@ export default {
         this.growing = true
         setTimeout(() => {
           this.growing = false
-        }, 5500)
+        }, 2500)
       }
     }
   },

@@ -116,6 +116,8 @@ export default new Vuex.Store({
     dialog: 'none',
     snackbar: '',
     snackbarTimeout: 3500,
+    // dailyNotificationId: false,
+    // dailyNotificationNextId: 1,
 
     deckList: [],
     proposedDeck: {},
