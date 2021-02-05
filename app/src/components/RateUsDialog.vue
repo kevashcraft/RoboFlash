@@ -6,24 +6,28 @@
       </v-card-title>
       <v-card-text>
         <v-row>
-          <v-col cols="4">
+          <v-col cols="4" class="d-flex justify-center">
             <img src="@/assets/rate-us-robot.png">
           </v-col>
-          <v-col cols="8" style="font-size: 18px">
+          <v-col cols="8" style="font-size: 18px; line-height: 28px" class="d-flex align-center justify-center">
             <p v-show="!reviewing">{{ langs.areYouEnjoying[referenceLanguage] }}</p>
             <p v-show="reviewing">{{ langs.pleaseGoodReview[referenceLanguage] }}</p>
           </v-col>
-          <v-col v-show="reviewing" cols="8" style="font-size: 18px">
-            <v-btn v-show="iOSApp" text @click="openStore">{{ langs.openAppStore[referenceLanguage] }}</v-btn>
-            <v-btn v-show="androidApp" text @click="openStore">{{ langs.openPlayStore[referenceLanguage] }}</v-btn>
-          </v-col>
         </v-row>
         <v-row v-show="!reviewing" class="justify-space-around" style="margin-top: 25px">
-          <v-btn text @click="gotoFeedback">{{ langs.no[referenceLanguage] }}</v-btn>
-          <v-btn raised color="primary" @click="rateUs">{{ langs.yes[referenceLanguage] }}</v-btn>
+          <v-btn text x-large @click="gotoFeedback">{{ langs.no[referenceLanguage] }}</v-btn>
+          <v-btn raised x-large color="primary" @click="rateUs">{{ langs.yes[referenceLanguage] }}</v-btn>
         </v-row>
-        <v-row v-show="reviewing" class="justify-end" style="margin-top: 25px">
-          <v-btn raised color="primary" @click="allDone">{{ langs.thanks[referenceLanguage] }}</v-btn>
+        <v-row v-show="reviewing" class="justify-space-around" style="margin-top: 25px">
+          <v-btn raised outlined v-show="iOSApp" text @click="openStore">
+            <v-icon left>mdi-open-in-new</v-icon>
+            {{ langs.openAppStore[referenceLanguage] }}
+          </v-btn>
+          <v-btn raised outlined v-show="androidApp" text @click="openStore">
+            <v-icon left>mdi-open-in-new</v-icon>
+            {{ langs.openPlayStore[referenceLanguage] }}
+          </v-btn>
+          <v-btn raised color="primary" class="white--text" @click="allDone">{{ langs.thanks[referenceLanguage] }}</v-btn>
         </v-row>
       </v-card-text>
     </v-card>

@@ -34,7 +34,7 @@ export default {
         if (!this.isApp) {
           this.opened = true
         }
-      }, 15000)
+      }, 45000)
     }
   },
 

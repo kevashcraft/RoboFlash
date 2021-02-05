@@ -1,5 +1,5 @@
 <template>
-  <v-container style="height: 65px; padding: 0 55px" class="action-bar">
+  <v-container style="height: 65px; padding: 0 35px" class="action-bar">
     <v-row class="justify-space-between align-center fill-height">
 
       <v-col cols="2" class="d-flex justify-start" v-if="streak > 0">

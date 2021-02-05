@@ -13,7 +13,7 @@
             <v-img src="@/assets/rate-us-robot.png" max-height="80px" contain></v-img>
           </v-col>
           <v-col cols="12">
-            <p>
+            <p style="font-size: 18px; line-height: 28px">
               {{langs.sum[referenceLanguage]}}
             </p>
           </v-col>
@@ -22,8 +22,8 @@
               <v-container>
                 <v-textarea v-model="feedback" autofocus :label="langs.tuwyt[referenceLanguage]"></v-textarea>
                 <v-row class="justify-space-between" style="margin-top: 15px">
-                  <v-btn @click="opened=false" text>{{langs.close[referenceLanguage]}}</v-btn>
-                  <v-btn color="green" type="submit" raised>{{langs.send[referenceLanguage]}}</v-btn>
+                  <v-btn x-large @click="opened=false" text>{{langs.close[referenceLanguage]}}</v-btn>
+                  <v-btn x-large class="white--text" color="primary" type="submit" raised>{{langs.send[referenceLanguage]}}</v-btn>
                 </v-row>
               </v-container>
             </v-form>
