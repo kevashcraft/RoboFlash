@@ -13,10 +13,14 @@
             <p v-show="!reviewing">{{ langs.areYouEnjoying[referenceLanguage] }}</p>
             <p v-show="reviewing">{{ langs.pleaseGoodReview[referenceLanguage] }}</p>
           </v-col>
+          <v-col v-show="reviewing" cols="8" style="font-size: 18px">
+            <v-btn v-show="iOSApp" text @click="openStore">{{ langs.openAppStore[referenceLanguage] }}</v-btn>
+            <v-btn v-show="androidApp" text @click="openStore">{{ langs.openPlayStore[referenceLanguage] }}</v-btn>
+          </v-col>
         </v-row>
         <v-row v-show="!reviewing" class="justify-space-around" style="margin-top: 25px">
           <v-btn text @click="gotoFeedback">{{ langs.no[referenceLanguage] }}</v-btn>
-          <v-btn raised color="primary" @click="rateUs">{{ langs.no[referenceLanguage] }}</v-btn>
+          <v-btn raised color="primary" @click="rateUs">{{ langs.yes[referenceLanguage] }}</v-btn>
         </v-row>
         <v-row v-show="reviewing" class="justify-end" style="margin-top: 25px">
           <v-btn raised color="primary" @click="allDone">{{ langs.thanks[referenceLanguage] }}</v-btn>
@@ -40,9 +44,7 @@ export default {
 
   watch: {
     dialog (dialog) {
-      if (!this.rateUsDialogEnabled) {
-        this.opened = dialog === 'rateUs'
-      }
+      this.opened = dialog === 'rateUs'
     },
     opened (opened) {
       if (!opened) {
@@ -57,18 +59,30 @@ export default {
 
   methods: {
     ...mapMutations(['setGeneric']),
-    rateUs () {
+    async rateUs () {
       this.reviewing = true
-      cordova.plugins.AppReview.requestReview().catch(() => {
-        return cordova.plugins.AppReview.openStoreScreen()
-      })
+      try {
+        await cordova.plugins.AppReview.requestReview()
+      } catch (error) {
+        console.log('review error')
+        await cordova.plugins.AppReview.openStoreScreen()
+      }
       this.setGeneric({prop: 'rateUsDialogEnabled', value: false })
+    },
+    openStore () {
+      if (this.androidApp) {
+        window.open('market://details?id=com.logicdudes.robot_flash')
+      }
+      if (this.iOSApp) {
+        window.open('itms-apps://apps.apple.com/us/app/roboflash/id1547172369?itsct=apps_box&itscg=30200&action=write-review')
+      }
     },
     gotoFeedback () {
       this.setGeneric({prop: 'rateUsDialogEnabled', value: false })
       this.setGeneric({prop: 'dialog', value: 'feedback' })
     },
     allDone () {
+      this.setGeneric({prop: 'dialog', value: 'none' })
       this.setGeneric({prop: 'rateUsDialogEnabled', value: false })
       this.setGeneric({prop: 'snackbar', value: this.langs.snackbar[this.referenceLangauge] })
     }
@@ -102,6 +116,16 @@ export default {
         en: 'Please give us a good review so we can keep growing!',
         es: '¡Danos una buena reseña para que podamos seguir creciendo!',
         ko: '우리가 계속 성장할 수 있도록 좋은 리뷰를 남겨주세요!'
+      },
+      openPlayStore: {
+        en: 'Open the Play Store',
+        es: 'Abre la Play Store',
+        ko: 'Play 스토어를 엽니 다.'
+      },
+      openAppStore: {
+        en: 'Open the App Store',
+        es: 'Abre la App Store',
+        ko: 'App Store 열기'
       },
       thanks: {
         en: 'Thanks!',

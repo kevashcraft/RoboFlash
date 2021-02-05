@@ -2,7 +2,7 @@
   <v-dialog v-model="opened" max-width="450px">
     <v-card elevation="4" outlined>
       <v-card-title class="justify-center">
-        <span>Software and Media API Licenses</span>
+        <span>Licenses</span>
       </v-card-title>
       <v-card-text>
         <v-row>
@@ -36,6 +36,13 @@ export default {
   watch: {
     dialog (dialog) {
       this.opened = dialog === 'licenses'
+    },
+    opened (opened) {
+      if (!opened) {
+        if (this.dialog === 'licenses') {
+          this.setGeneric({prop: 'dialog', value: 'none'})
+        }
+      }
     }
   },
 

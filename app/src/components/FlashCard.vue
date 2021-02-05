@@ -22,8 +22,8 @@
         <v-img :class="{blurredimg: blurHint}" v-show="!hideHint" :src="card.image" contain draggable="false" style="max-width: 80%; max-height: 80%"></v-img>
       </v-row>
       <v-row v-if="testMode" class="flex-grow-1 justify-center align-center" style="padding: 15px">
-        <v-col cols="6" class="test-images" v-for="(image, idx) in card.answerOptions" :key="idx" @click="guess(idx)">
-          <v-img :src="image" draggable="false" class="test-image"></v-img>
+        <v-col cols="6" class="test-images" v-for="(opt, idx) in card.answerOptions" :key="idx" @click="guess(idx)">
+          <v-img :src="opt.image" draggable="false" class="test-image" style="text-align: center; line-height: 150px; font-size: 32px; color: white; text-shadow: 2px 2px 4px black">{{ opt.text }}</v-img>
         </v-col>
       </v-row>
       <v-row v-if="!testMode" class="flex-grow-0 justify-center align-start answer" style="margin-bottom: 25px">

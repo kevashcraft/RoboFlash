@@ -409,10 +409,16 @@ export default new Vuex.Store({
         card.answerOptions = []
         for (let idx=0; idx<4; idx++) {
           if (idx === card.correctAnswerIdx) {
-            card.answerOptions.push(card.image)
+            card.answerOptions.push({
+              image: card.image,
+              text: card.words[state.referenceLanguage]
+            })
           } else {
             const optionIdx = imageIdxs.pop()
-            card.answerOptions.push(cards[optionIdx].image)
+            card.answerOptions.push({
+              image: cards[optionIdx].image,
+              text: cards[optionIdx].words[state.referenceLanguage]
+            })
           }
         }
       }

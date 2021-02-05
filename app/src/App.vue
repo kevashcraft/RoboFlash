@@ -2,7 +2,7 @@
   <v-app>
     <v-container class="fill-height" style="padding: 0; max-width: 768px">
       <v-row class="fill-height flex-column">
-        <ScoreBar class="flex-grow-0" />
+        <!-- <ScoreBar class="flex-grow-0" /> -->
         <FlashCards class="flex-grow-1 flashcards" />
         <ProgressBars class="flex-grow-0" />
         <ActionBar class="flex-grow-0" @showDebug="showDebug" />
@@ -41,7 +41,7 @@
 
 <script>
 import ActionBar from './components/ActionBar'
-import ScoreBar from './components/ScoreBar'
+// import ScoreBar from './components/ScoreBar'
 import FlashCards from './components/FlashCards'
 import ProgressBars from './components/ProgressBars'
 import ConfirmDownload from './components/ConfirmDownload'
@@ -67,7 +67,7 @@ export default {
 
   components: {
     ActionBar,
-    ScoreBar,
+    // ScoreBar,
     FlashCards,
     ProgressBars,
     ConfirmDownload,
@@ -95,10 +95,20 @@ export default {
         en: `Flash through a set to keep your streak alive. It's fast!`,
         es: 'Destella a través de un set para mantener viva tu racha. ¡Es rápido!',
         ko: '연속을 유지하기 위해 세트를 통해 플래시. 빠르다!'
+      },
+      cbat: {
+        en: `Come back again!`,
+        es: 'Volver de nuevo',
+        ko: '다시 돌아와'
+      },
+      cbatt: {
+        en: `Learn some new words, start a new streak!`,
+        es: '¡Aprenda algunas palabras nuevas, comience una nueva racha!',
+        ko: '새로운 단어를 배우고 새로운 연속을 시작하십시오!'
       }
     }
   }),
-  computed: mapState(['isApp', 'darkTheme', 'referenceLangauge']),
+  computed: mapState(['isApp', 'darkTheme', 'referenceLanguage']),
 
   watch: {
     darkTheme () {
@@ -191,16 +201,26 @@ export default {
         //   cordova.plugins.notification.local.cancel(this.$store.state.dailyNotificationId)
         // }
         // this.setGeneric({prop: 'dailyNotificationId', value: this.$store.state.dailyNotificationNextId})
-        cordova.plugins.notification.local.schedule({
-          id: this.$store.state.dailyNotificationNextId,
-          title: this.langs.no1t[this.referenceLanguage],
-          text: this.langs.no1te[this.referenceLanguage],
-          color: '#1f3566',
-          smallIcon: 'res://robot',
-          foreground: true,
-          icon: 'https://roboflash.app/robot-feet.png',
-          trigger: { at: moment().add(1, 'day').set({hour: 16}).toDate() }
-        })        
+
+        cordova.plugins.notification.local.schedule([{
+            id: this.$store.state.dailyNotificationNextId,
+            title: this.langs.no1t[this.referenceLanguage],
+            text: this.langs.no1te[this.referenceLanguage],
+            color: '#1f3566',
+            smallIcon: 'res://robot',
+            foreground: true,
+            icon: 'https://roboflash.app/robot-feet.png',
+            trigger: { at: moment().add(1, 'day').set({hour: 16}).toDate() }
+          }, {
+            id: this.$store.state.dailyNotificationNextId,
+            title: this.langs.cbat[this.referenceLanguage],
+            text: this.langs.cbatt[this.referenceLanguage],
+            color: '#1f3566',
+            smallIcon: 'res://robot',
+            foreground: true,
+            icon: 'https://roboflash.app/robot-feet.png',
+            trigger: { at: moment().add(4, 'day').set({hour: 11}).toDate() }
+        }])
         // this.setGeneric({prop: 'dailyNotificationNextId', value: this.$store.state.dailyNotificationNextId+1})
       }
     }
