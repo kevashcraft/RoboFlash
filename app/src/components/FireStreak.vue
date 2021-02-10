@@ -38,18 +38,14 @@ import { mapState } from 'vuex'
 export default {
   name: 'FireStreak',
   computed: {
-    ...mapState([
-      'streak'
-    ]),
+    ...mapState(['streak']),
     showing () {
       return this.streak > 0
     }
   },
-  methods: {
-  },
   watch: {
-    streak () {
-      if (this.streak) {
+    streak (streak) {
+      if (streak) {
         this.growing = true
         setTimeout(() => {
           this.growing = false
@@ -59,9 +55,7 @@ export default {
   },
 
   data: () => ({
-    growing: false,
-    langs: {
-    }    
-  }),
+    growing: false
+  })
 }
 </script>

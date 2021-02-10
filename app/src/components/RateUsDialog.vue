@@ -19,15 +19,15 @@
           <v-btn raised x-large color="primary" @click="rateUs">{{ langs.yes[referenceLanguage] }}</v-btn>
         </v-row>
         <v-row v-show="reviewing" class="justify-space-around" style="margin-top: 25px">
-          <v-btn raised outlined v-show="iOSApp" text @click="openStore">
+          <v-btn style="margin: 5px" raised outlined v-show="iOSApp" text @click="openStore">
             <v-icon left>mdi-open-in-new</v-icon>
             {{ langs.openAppStore[referenceLanguage] }}
           </v-btn>
-          <v-btn raised outlined v-show="androidApp" text @click="openStore">
+          <v-btn style="margin: 5px" raised outlined v-show="androidApp" text @click="openStore">
             <v-icon left>mdi-open-in-new</v-icon>
             {{ langs.openPlayStore[referenceLanguage] }}
           </v-btn>
-          <v-btn raised color="primary" class="white--text" @click="allDone">{{ langs.thanks[referenceLanguage] }}</v-btn>
+          <v-btn style="margin: 5px" raised color="primary" class="white--text" @click="allDone">{{ langs.thanks[referenceLanguage] }}</v-btn>
         </v-row>
       </v-card-text>
     </v-card>

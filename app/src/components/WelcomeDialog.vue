@@ -11,10 +11,7 @@
           </v-col>
           <v-col cols="8" class="d-flex align-center">
             <p style="font-size: 18px; line-height: 28px">
-              <strong>{{ langs.haw[referenceLanguage] }}</strong>
-              <br />
-              <br />
-              {{ langs.had[referenceLanguage] }} <strong>{{ langs.afap[referenceLanguage] }}</strong>
+              <strong>{{ langs.haw[referenceLanguage] }}</strong> {{ langs.had[referenceLanguage] }} <strong>{{ langs.afap[referenceLanguage] }}</strong>
             </p>
           </v-col>
         </v-row>

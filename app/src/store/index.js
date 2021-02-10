@@ -107,7 +107,7 @@ export default new Vuex.Store({
     globalCardCount: 0,
     activeCardCount: 0,
     increaseStreakOnChange: false,
-    streak: 0,
+    streak: -1,
 
     welcomeDialogDisplayed: false,
     firstTestDialogDisplayed: false,
@@ -229,11 +229,13 @@ export default new Vuex.Store({
         }
         if (!state.questionViewCounts[currentCard.question]) state.questionViewCounts[currentCard.question] = 0
         state.questionViewCounts[currentCard.question]++
-        console.log('CHECKING!')
-        console.log('state.activeCardCount', state.activeCardCount)
         if (state.increaseStreakOnChange && state.activeCardCount > 0) {
           state.streak += 1
-          console.log('increasing!', state.streak, state.activeCardCount)
+          if (state.streak === 0) {
+            setTimeout(() => {
+              state.streak += 1
+            }, 250)
+          }
           state.increaseStreakOnChange = false
         }
   

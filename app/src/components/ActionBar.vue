@@ -2,11 +2,11 @@
   <v-container style="height: 65px; padding: 0 35px" class="action-bar">
     <v-row class="justify-space-between align-center fill-height">
 
-      <v-col cols="2" class="d-flex justify-start" v-if="streak > 0">
+      <v-col cols="2" class="d-flex justify-start" v-if="streak > -1">
         <FireStreak style="margin-top: -5px" />
       </v-col>
 
-      <v-col :cols="streak > 0 ? 8 : 10" class="d-flex" :class="{'justify-center': streak > 0, 'justify-start': streak === 0 }">
+      <v-col :cols="streak > 0 ? 8 : 10" class="d-flex" :class="{'justify-center': streak > -1, 'justify-start': streak === -1 }">
         <v-menu top :offset-y="true" :nudge-top="25" :close-on-content-click="false" v-model="deckMenuOpened">
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" color="blue" @click="langOptionGroup = false">

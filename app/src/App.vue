@@ -3,6 +3,7 @@
     <v-container class="fill-height" style="padding: 0; max-width: 768px">
       <v-row class="fill-height flex-column">
         <!-- <ScoreBar class="flex-grow-0" /> -->
+        <div class="ios-spacer"></div>
         <FlashCards class="flex-grow-1 flashcards" />
         <ProgressBars class="flex-grow-0" />
         <ActionBar class="flex-grow-0" @showDebug="showDebug" />
@@ -31,6 +32,9 @@
 </template>
 
 <style lang="scss">
+.ios-spacer {
+  height: env(safe-area-inset-top) !important;
+}
 .flashcards {
   @media (min-height: 1200px) {
     margin-top: 45px;
@@ -136,7 +140,7 @@ export default {
         this.setGeneric({prop: 'increaseStreakOnChange', value: true})
       } else if (daydiff > 1 || isNaN(daydiff)) {
         this.setGeneric({prop: 'increaseStreakOnChange', value: true})
-        this.setGeneric({prop: 'streak', value: 0 })
+        this.setGeneric({prop: 'streak', value: -1 })
         this.$store.commit('resetActiveCardCount')
       } else {
         this.setGeneric({prop: 'increaseStreakOnChange', value: false})
@@ -203,7 +207,7 @@ export default {
         // this.setGeneric({prop: 'dailyNotificationId', value: this.$store.state.dailyNotificationNextId})
 
         cordova.plugins.notification.local.schedule([{
-            id: this.$store.state.dailyNotificationNextId,
+            id: 1,
             title: this.langs.no1t[this.referenceLanguage],
             text: this.langs.no1te[this.referenceLanguage],
             color: '#1f3566',
@@ -212,7 +216,8 @@ export default {
             icon: 'https://roboflash.app/robot-feet.png',
             trigger: { at: moment().add(1, 'day').set({hour: 16}).toDate() }
           }, {
-            id: this.$store.state.dailyNotificationNextId,
+            // id: this.$store.state.dailyNotificationNextId,
+            id: 2,
             title: this.langs.cbat[this.referenceLanguage],
             text: this.langs.cbatt[this.referenceLanguage],
             color: '#1f3566',
