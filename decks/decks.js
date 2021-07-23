@@ -381,13 +381,29 @@ async function gcsFileSave(folder, file, data, type) {
 
 async function gcsReadFile(folder, file, type) {
     const filename = `${folder}/${file}`
-    const request = await storage.bucket(deckDataBucket).file(filename).download()
-    let data = request[0].toString()
-    if (type === 'json') {
-        data = JSON.parse(data)
+    console.log('opening', filename)
+    while (true) {
+        try {
+            const request = await new Promise(async (resolve, reject) => {
+                let inMotion = true
+                setTimeout(() => {
+                    inMotion = false
+                    reject('nope')
+                }, 5000)
+                const r = await storage.bucket(deckDataBucket).file(filename).download()
+                if (inMotion) resolve(r)
+            })
+            console.log('opened!')
+            let data = request[0].toString()
+            if (type === 'json') {
+                data = JSON.parse(data)
+            }
+            console.log('RETURNING file data')
+            return data
+        } catch (error) {
+            console.log('download error', error)
+        }
     }
-
-    return data
 }
 
 async function saveData(filename, data, public) {

@@ -28,14 +28,13 @@ export default {
   computed: mapState(['isApp']),
 
   mounted () {
-    console.log('window.screen.width', window.screen.width)
-    if (window.screen.width > 1200) {
-      setTimeout(() => {
-        if (!this.isApp) {
-          this.opened = true
-        }
-      }, 45000)
-    }
+    // if (window.screen.width > 1200) {
+    //   setTimeout(() => {
+    //     if (!this.isApp) {
+    //       this.opened = true
+    //     }
+    //   }, 45000)
+    // }
   },
 
   data: () => ({
