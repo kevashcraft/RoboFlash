@@ -87,8 +87,8 @@ async function main() {
     const decks = await getDecks()
     console.log('decks', decks)
     // await populate(decks)
-    // await server(decks)
-    await deploy(decks)
+    await server(decks)
+    // await deploy(decks)
 }
 
 async function getDecks () {
